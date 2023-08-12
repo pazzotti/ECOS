@@ -1,0 +1,120 @@
+<body>
+  <ul>
+    <div>
+      <div class="input-row">
+        <label for="fileInput">Selecionar Arquivo PF Tool:</label>
+        <input type="file" id="fileInput" (change)="onFileSelected($event)"
+          [ngClass]="{ 'green-border': jsonData !== undefined }">
+
+      </div>
+
+
+      <div class="input-row" *ngIf="jsonData !== undefined">
+        <label for="fileInputTXT">Selecionar Arquivo Parametros:</label>
+        <input type="file" id="fileInputTXT" (change)="onFileTXTSelected($event)"
+          [ngClass]="{ 'green-border': jsonDataParametros !== undefined }">
+      </div>
+
+      <div class="input-row" *ngIf="jsonData !== undefined && jsonDataParametros !== undefined">
+        <label for="fileInputPECAS">Selecionar Arquivo PECAS:</label>
+        <input type="file" id="fileInputPECAS" (change)="onFilePECASSelected($event)"
+          [ngClass]="{ 'green-border': jsonDataPecas !== undefined }">
+      </div>
+
+      <div class="input-row"
+        *ngIf="jsonData !== undefined && jsonDataParametros !== undefined && jsonDataPecas !== undefined">
+        <label for="fileInputNECA">Selecionar Arquivo Neca:</label>
+        <input type="file" id="fileInputNECA" (change)="onFileNECASelected($event)"
+          [ngClass]="{ 'green-border': jsonDataNeca !== undefined }">
+      </div>
+
+      <div class="input-row"
+        *ngIf="jsonData !== undefined && jsonDataParametros !== undefined && jsonDataPecas !== undefined && jsonDataNeca !== undefined">
+        <button class="data-save-btn" (click)="salvarNoBanco()">Salvar Dados</button>
+        <div class="progress-bar-container">
+          <div class="progress-bar" [style.width]="getProgressWidth()"></div>
+        </div>
+      </div>
+
+
+
+
+      <a #downloadLink style="display: none;"></a>
+      <div *ngIf="dataLoaded">
+        <p>Total lines {{ filteredData.length }}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <button (click)="sortBy('Process')">Last Update</button>
+              </th>
+              <th>
+                <button (click)="sortBy('Invoice')">ECO Number</button>
+              </th>
+              <th>
+                <button (click)="sortBy('Container')">Status</button>
+              </th>
+              <th>
+                <button (click)="sortBy('Transport')">Part Replaced</button>
+              </th>
+              <th>
+                <button (click)="sortBy('Dias')">Delivery</button>
+              </th>
+              <th>
+                <button (click)="sortBy('Dias')">Packading</button>
+              </th>
+              <th>
+                <button (click)="sortBy('TripCost')">General Time</button>
+              </th>
+              <th>
+                <button (click)="sortBy('TripCost')">SOP</button>
+              </th>
+              <th>
+                <button (click)="sortBy('TripCost')">SOCOP</button>
+              </th>
+              <th>
+                <button (click)="sortBy('TripCost')">SOP Dev</button>
+              </th>
+              <th>
+                <button (click)="sortBy('TripCost')">SOCOP Dev</button>
+              </th>
+              <th>
+                <button (click)="sortBy('TripCost')">Stock</button>
+              </th>
+              <th>
+                <button (click)="sortBy('TripCost')">Pipeline</button>
+              </th>
+              <th>
+                <button (click)="sortBy('TripCost')">Unit Cost</button>
+              </th>
+              <th>
+                <button (click)="sortBy('TripCost')">Total Cost</button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of filteredData">
+              <td>{{ item.UpdateDate.toLocaleDateString('pt-BR') }}</td>
+              <td>{{ item.EcoN }}</td>
+              <td>{{ item.Status }}</td>
+              <td>{{ item.Replaced }}</td>
+              <td>{{ item.Packaging }}</td>
+              <td>{{ item.Embalagem }}</td>
+              <td>{{ item.GeneralTime }}</td>
+              <td>{{ item.SOP }}</td>
+              <td>{{ item.SOCOP }}</td>
+              <td>{{ item.SOPDev }}</td>
+              <td>{{ item.SOCOPDev }}</td>
+              <td>{{ item.Stock }}</td>
+              <td>{{ item.Pipeline }}</td>
+              <td>{{ item.Custo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</td>
+              <td>{{ ((item.Pipeline + item.Stock) * item.Custo).toLocaleString('pt-BR', { style: 'currency', currency:
+                'BRL' }) }}</td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ul>
+</body>

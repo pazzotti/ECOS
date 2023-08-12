@@ -1,0 +1,484 @@
+<body>
+  <div>
+    <div *ngIf="dataLoaded">
+      <table class="table2">
+        <thead>
+          <th class="centro-align">
+            <i-feather name="plus-circle" (click)="addViagem('')"></i-feather>
+          </th>
+          <th class="corlinha">
+            Milk Run Sul
+          </th>
+        </thead>
+      </table>
+
+      <div class="table2">
+        <table>
+          <thead>
+            <tr>
+              <th class="auto-width">
+                Tipo de Veículo
+              </th>
+              <th class="auto-width">
+                Placa
+              </th>
+              <th class="auto-width">
+                Localização Atual do Veículo
+              </th>
+              <th class="auto-width">
+                Rastreio
+              </th>
+              <th class="auto-width">
+                Fornecedores
+              </th>
+              <th>
+                Destino
+              </th>
+              <th>
+                Editar
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let item of items; let i = index">
+              <tr>
+                <td [attr.contenteditable]="editMode[i] ? true : null">{{ item["Transport Type"] }}</td>
+                <td (click)="toggleEditMode(i)">{{ item["Plate"] }}</td>
+                <td>{{ item["Endereco"] }}</td>
+                <td *ngIf="item['Conexao'] === true" (click)="toggleInformationMode(i)"><i-feather name="zap"
+                    class="blinking-icon"></i-feather></td>
+                <td *ngIf="item['Conexao'] !== true" (click)="toggleInformationMode(i)"><i-feather name="zap-off"
+                    class="vermelho-icon"></i-feather></td>
+                <td class="left-align auto-width">
+                  <div class="button-container">
+                    <button *ngIf="item.hasOwnProperty('Fornecedor 1') && item['Fornecedor 1'] !== ''"
+                      [ngClass]="{'background-red': item.cadastrado1 == false, 'background-blue': item.cadastrado1 == true, 'background-green': item['Passo Fornecedor1'] == 1 || item['Passo Fornecedor1'] == 2}"
+                      (click)="acaoDeClique(item, 'Passo Fornecedor1', 'cadastrado1','Fornecedor 1')">
+                      {{ item['Fornecedor 1'] }}
+                      <br>
+                      Janela - {{ item['Janela 1'] | date: 'dd/MM/yyyy - HH:mm' }}
+                    </button>
+
+                    <button *ngIf="item.hasOwnProperty('Fornecedor 2') && item['Fornecedor 2'] !== ''"
+                      [ngClass]="{'background-red': item.cadastrado2 == false, 'background-blue': item.cadastrado2 == true, 'background-green': item['Passo Fornecedor2'] == 1 || item['Passo Fornecedor2'] == 2}"
+                      (click)="acaoDeClique(item, 'Passo Fornecedor2', 'cadastrado2','Fornecedor 2')">
+                      {{ item['Fornecedor 2'] }}
+                      <br>
+                      Janela - {{ item['Janela 2'] | date: 'dd/MM/yyyy - HH:mm' }}
+                    </button>
+
+                    <button *ngIf="item.hasOwnProperty('Fornecedor 3') && item['Fornecedor 3'] !== ''"
+                      [ngClass]="{'background-red': item.cadastrado3 == false, 'background-blue': item.cadastrado3 == true, 'background-green': item['Passo Fornecedor3'] == 1 || item['Passo Fornecedor3'] == 2}"
+                      (click)="acaoDeClique(item, 'Passo Fornecedor3', 'cadastrado3','Fornecedor 3')">
+                      {{ item['Fornecedor 3'] }}
+                      <br>
+                      Janela - {{ item['Janela 3'] | date: 'dd/MM/yyyy - HH:mm' }}
+                    </button>
+
+                    <button *ngIf="item.hasOwnProperty('Fornecedor 4') && item['Fornecedor 4'] !== ''"
+                      [ngClass]="{'background-red': item.cadastrado4 == false, 'background-blue': item.cadastrado4 == true, 'background-green': item['Passo Fornecedor4'] == 1 || item['Passo Fornecedor4'] == 2}"
+                      (click)="acaoDeClique(item, 'Passo Fornecedor4', 'cadastrado4','Fornecedor 4')">
+                      {{ item['Fornecedor 4'] }}
+                      <br>
+                      Janela - {{ item['Janela 4'] | date: 'dd/MM/yyyy - HH:mm' }}
+                    </button>
+
+                    <!-- Outros botões de fornecedores -->
+                  </div>
+                </td>
+                <td class="left-align auto-width">
+                  <div class="button-container">
+
+
+                    <button *ngIf="item.hasOwnProperty('Destino 1') && item['Destino 1'] !== ''"
+                      [ngClass]="{'background-red': item.cadastradoDestino1 == false, 'background-blue': item.cadastradoDestino1 == true, 'background-green': item['Passo Destino1'] == 1 || item['Passo Destino1'] == 2}"
+                      (click)="acaoDeClique(item, 'Passo Destino1','cadastradoDestino1','Destino 1')">
+                      {{ item['Destino 1'] }}
+                      <br>
+                      Janela - {{ item['JanelaDestino 1'] | date: 'dd/MM/yyyy - HH:mm' }}
+                    </button>
+
+                    <button *ngIf="item.hasOwnProperty('Destino 2') && item['Destino 2'] !== ''"
+                      [ngClass]="{'background-red': item.cadastradoDestino2 == false, 'background-blue': item.cadastradoDestino2 == true, 'background-green': item['Passo Destino2'] == 1 || item['Passo Destino2'] == 2}"
+                      (click)="acaoDeClique(item, 'Passo Destino2', 'cadastradoDestino2','Destino 2')">
+                      {{ item['Destino 2'] }}
+                      <br>
+                      Janela - {{ item['JanelaDestino 2'] | date: 'dd/MM/yyyy - HH:mm' }}
+                    </button>
+
+                    <button *ngIf="item.hasOwnProperty('Destino 3') && item['Destino 3'] !== ''"
+                      [ngClass]="{'background-red': item.cadastradoDestino3 == false, 'background-blue': item.cadastradoDestino3 == true, 'background-green': item['Passo Destino3'] == 1 || item['Passo Destino3'] == 2}"
+                      (click)="acaoDeClique(item, 'Passo Destino3', 'cadastradoDestino3','Destino 3')">
+                      {{ item['Destino 3'] }}
+                      <br>
+                      Janela - {{ item['JanelaDestino 3'] | date: 'dd/MM/yyyy - HH:mm' }}
+                    </button>
+
+                    <button *ngIf="item.hasOwnProperty('Destino 4') && item['Destino 4'] !== ''"
+                      [ngClass]="{'background-red': item.cadastradoDestino4 == false, 'background-blue': item.cadastradoDestino4 == true, 'background-green': item['Passo Destino4'] == 1 || item['Passo Destino'] == 2}"
+                      (click)="acaoDeClique(item, 'Passo Destino4','cadastradoDestino4','Destino 4')">
+                      {{ item['Destino 4'] }}
+                      <br>
+                      Janela - {{ item['JanelaDestino 4'] | date: 'dd/MM/yyyy - HH:mm' }}
+                    </button>
+
+
+                    <!-- Outros botões de destino -->
+
+                  </div>
+
+                </td>
+                <td class="same-line-container">
+                  <i-feather name="edit" (click)="addViagem(item)" class="button-spacing"></i-feather>
+                  <i-feather name="delete" (click)="deleteItem(item.ID)" class="button-spacing"></i-feather>
+                </td>
+              </tr>
+              <table *ngIf="editMode[i]" class="centered-table">
+                <tr>
+                  <td><label>Inserir Placa</label></td>
+                </tr>
+                <tr>
+                  <td>
+                    <input type="text" [(ngModel)]="item['Plate']">
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <!-- Outros inputs para as colunas restantes -->
+                    <button class="button-spacing" (click)="salvar('Placa',item); editMode[i] = false">Salvar</button>
+                    <button class="button-spacing" (click)="editMode[i] = false">Cancelar</button>
+                  </td>
+
+                </tr>
+
+              </table>
+              <div *ngIf="informationMode[i]">
+                <table class="centered-table">
+                  <tr>
+                    <td><label>Última Atualização</label></td>
+                    <td><label>Último Sinal do Veículo</label></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input type="text" [(ngModel)]="item['data_atualizacao']">
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="item['DataBordo']">
+                    </td>
+                  </tr>
+
+                </table>
+                <table class="centered-table2">
+                  <tr>
+                    <button (click)="informationMode[i] = false">Ok</button>
+                  </tr>
+                </table>
+
+
+              </div>
+
+
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</body>
+
+<clr-modal [(clrModalOpen)]="dialogOpen" [clrModalSize]="'md'" class="dialog-container2">
+  <h2 class="modal-title">Adicionar Fornecedor</h2>
+  <div class="modal-body">
+    <form class="inputs">
+      <div>
+        <label class="modal-label">Fornecedor</label>
+        <input type="string" name="fornecedor" [(ngModel)]="item.local" class="modal-input1">
+      </div>
+      <div>
+        <label class="modal-label">e-mail</label>
+        <input type="string" name="email" [(ngModel)]="item.contato" class="modal-input1">
+      </div>
+      <div>
+        <label class="modal-label">Endereço</label>
+        <input type="string" name="endereco" [(ngModel)]="item.endereco" class="modal-input3">
+      </div>
+      <div class="same-line-container">
+        <label class="modal-label">Latitude</label>
+        <input type="string" name="latitude" [(ngModel)]="item.latitude" class="modal-input4">
+        <label class="modal-label">Longitude</label>
+        <input type="string" name="logitude" [(ngModel)]="item.longitude" class="modal-input4">
+      </div>
+      <div class="modal-divfinal">
+        <button class="button" type="button" (click)="salvarFornecedor()">Save</button>
+        <button class="botao" type="button" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="dialogAddViagem" [clrModalSize]="'md'" class="dialog-container">
+
+  <h3 class="modal-title">Ajuste de Programação</h3>
+  <div class="modal-body">
+    <form class="inputs">
+      <table class="table2000" style="width: 100%;">
+        <tr>
+          <td style="width: 5%;">
+            <label class="modal-label">Transportadora</label>
+          </td>
+          <td style="width: 20%;">
+            <select id="transportadore" name="transportadore" [(ngModel)]="item.Transportadoras" class="modal-select">
+              <option *ngFor="let nome of listaTransportadoras" [value]="nome">{{ nome }}</option>
+            </select>
+          </td>
+          <td style="width: 5%;">
+            <label class="modal-label">Descrição</label>
+          </td>
+          <td style="width: 20%;">
+            <select id="descricao" name="descricao" [(ngModel)]="item.description" class="modal-select">
+              <option *ngFor="let prog of progManual" [value]="prog">{{ prog }}</option>
+            </select>
+
+
+          </td>
+          <td style="width: 5%;">
+            <label class="modal-label">Tipo de Veículo</label>
+          </td>
+          <td style="width: 20%;">
+
+
+            <select id="tipoveiculo" name="tipoveiculo" [(ngModel)]="item['Transport Type']" class="modal-select">
+              <option *ngFor="let modelo of listaVeiculo1" [value]="modelo">{{ modelo }}</option>
+            </select>
+
+          </td>
+          <td style="width: 5%;">
+            <label class="modal-label">Placa</label>
+          </td>
+          <td style="width: 8%;">
+            <input type="string" name="placa" [(ngModel)]="item.Plate" class="modal-input1">
+          </td>
+          <td style="width: 5%;">
+            <label class="modal-label">Data da Coleta</label>
+          </td>
+          <td style="width: 7%;">
+            <input type="date" id="datacoleta" [(ngModel)]="item.date" name="datacoleta" class="button-spacing">
+          </td>
+        </tr>
+      </table>
+      <table class="table2000" style="width: 100%;">
+        <tr>
+          <td style="width: 5%;">
+            <label class="modal-label">Fornecedor 1</label>
+          </td>
+          <td style="width: 20%;">
+            <select id="fornecedor1" name="fornecedor1" [(ngModel)]="item['Fornecedor 1']" class="modal-select">
+              <option *ngFor="let fornecedor of fornecedores1" [value]="fornecedor">{{ fornecedor}}</option>
+            </select>
+          </td>
+          <td style="width: 5%;">
+            <label class="modal-label">Fornecedor 2</label>
+          </td>
+          <td style="width: 20%;">
+            <select id="fornecedor2" name="fornecedor2" [(ngModel)]="item['Fornecedor 2']" class="modal-select">
+              <option *ngFor="let fornecedor of fornecedores2" [value]="fornecedor">{{ fornecedor}}</option>
+            </select>
+          </td>
+          <td style="width: 5%;">
+            <label class="modal-label">Fornecedor 3</label>
+          </td>
+          <td style="width: 20%;">
+            <select id="fornecedor3" name="fornecedor3" [(ngModel)]="item['Fornecedor 3']" class="modal-select">
+              <option *ngFor="let fornecedor of fornecedores3" [value]="fornecedor">{{ fornecedor}}</option>
+            </select>
+          </td>
+          <td style="width: 5%;">
+            <label class="modal-label">Fornecedor 4</label>
+          </td>
+          <td style="width: 20%;">
+            <select id="fornecedor4" name="fornecedor4" [(ngModel)]="item['Fornecedor 4']" class="modal-select">
+              <option *ngFor="let fornecedor of fornecedores4" [value]="fornecedor">{{ fornecedor}}</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+
+      <table class="table2000" style="width: 100%;">
+        <tr>
+          <td style="width: 5%;">
+            <label class="modal-label">Janela 1</label>
+          </td>
+          <td style="width: 20%;">
+            <input type="time" id="Janela1" name="Janela1" [(ngModel)]="janela1" placeholder="HH:mm:ss"
+              min="00:00:00" max="23:59:00" required class="modal-input2" />
+          </td>
+          <td style="width: 5%;">
+            <label class="modal-label">Janela 2</label>
+          </td>
+          <td style="width: 20%;">
+            <input type="time" id="Janela2" name="Janela2" [(ngModel)]="janela2" placeholder="HH:mm:ss"
+              min="00:00:00" max="23:59:00" required class="modal-input2" />
+          </td>
+          <td style="width: 5%;">
+            <label class="modal-label">Janela 3</label>
+          </td>
+          <td style="width: 20%;">
+            <input type="time" id="Janela3" name="Janela3" [(ngModel)]="janela3" placeholder="HH:mm:ss"
+              min="00:00:00" max="23:59:00" required class="modal-input2" />
+          </td>
+          <td style="width: 5%;">
+            <label class="modal-label">Janela 4</label>
+          </td>
+          <td style="width: 20%;">
+            <input type="time" id="Janela4" name="Janela4" [(ngModel)]="janela4" placeholder="HH:mm:ss"
+              min="00:00:00" max="23:59:00" required class="modal-input2" />
+          </td>
+          <td>
+          </td>
+        </tr>
+      </table>
+      <table class="table2000" style="width: 100%;">
+        <tr>
+          <td style="width: 5%;">
+            <label class="modal-label">Percurso (Km)</label>
+          </td>
+
+          <td style="width: 20%;">
+            <input type="string" name="percurso" [(ngModel)]="item['Total Distance']" class="modal-input1">
+          </td>
+
+          <td style="width: 5%;">
+            <label class="modal-label">Peso Total</label>
+          </td>
+
+          <td style="width: 20%;">
+            <input type="string" name="pesototal" [(ngModel)]="item['Weight Loaded']" class="modal-input1">
+          </td>
+
+          <td style="width: 5%;">
+            <label class="modal-label">Volume Total M3</label>
+          </td>
+
+          <td style="width: 20%;">
+            <input type="string" name="volumetotal" [(ngModel)]="item.Cubage" class="modal-input1">
+          </td>
+          <td style="width: 5%;">
+            <label class="modal-label">Volumes</label>
+          </td>
+
+          <td style="width: 20%;">
+            <input type="string" name="caixas" [(ngModel)]="item.itemsLoaded" class="modal-input1">
+          </td>
+
+        </tr>
+      </table>
+
+      <table class="table2000" style="width: 100%;">
+        <tr>
+          <td style="width: 88%;"></td>
+
+          <td style="width: 5%;">
+            <label class="modal-label">Data de Descarga</label>
+          </td>
+          <td style="width: 7%;">
+            <input type="date" id="datadescarga" [(ngModel)]="item.datadescarga" name="datadescarga"
+              class="button-spacing">
+          </td>
+        </tr>
+      </table>
+
+      <table class="table2000" style="width: 100%;">
+        <tr>
+          <td style="width: 5%;">
+            <label class="modal-label">Local de Descarga 1</label>
+          </td>
+          <td style="width: 20%;">
+
+            <select id="localdescarga1" name="localdescarga1" [(ngModel)]="item['Destino 1']" class="modal-select">
+              <option *ngFor="let descarga of fornecedoresDescarga1" [value]="descarga">{{ descarga }}</option>
+            </select>
+
+          </td>
+
+          <td style="width: 5%;">
+            <label class="modal-label">Local de Descarga 2</label>
+          </td>
+          <td style="width: 20%;">
+            <select id="localdescarga2" name="localdescarga2" [(ngModel)]="item['Destino 2']" class="modal-select">
+              <option *ngFor="let descarga of fornecedoresDescarga2" [value]="descarga">{{ descarga }}</option>
+            </select>
+          </td>
+          <td style="width: 5%;">
+            <label class="modal-label">Local de Descraga 3</label>
+          </td>
+          <td style="width: 20%;">
+            <select id="localdescarga3" name="localdescarga3" [(ngModel)]="item['Destino 3']" class="modal-select">
+              <option *ngFor="let descarga of fornecedoresDescarga3" [value]="descarga">{{ descarga }}</option>
+            </select>
+          </td>
+
+          <td style="width: 5%;">
+            <label class="modal-label">Local de Descarga 4</label>
+          </td>
+          <td style="width: 20%;">
+            <select id="localdescarga4" name="localdescarga4" [(ngModel)]="item['Destino 4']" class="modal-select">
+              <option *ngFor="let descarga of fornecedoresDescarga4" [value]="descarga">{{ descarga }}</option>
+            </select>
+          </td>
+
+        </tr>
+      </table>
+
+      <table class="table2000" style="width: 100%;">
+        <tr>
+          <td style="width: 5%;">
+            <label class="modal-label">Janela Descarga 1</label>
+          </td>
+          <td style="width: 20%;">
+            <input type="time" id="JanelaDescarga1" name="JanelaDescarga1" [(ngModel)]="janelaDestino1"
+              placeholder="HH:mm:ss" min="00:00:00" max="23:59:00" required class="modal-input2" />
+          </td>
+
+          <td style="width: 5%;">
+            <label class="modal-label">Janela Descarga 2</label>
+          </td>
+          <td style="width: 20%;">
+            <input type="time" id="JanelaDescarga2" name="JanelaDescarga2" [(ngModel)]="janelaDestino2"
+              placeholder="HH:mm:ss" min="00:00:00" max="23:59:00" required class="modal-input2" />
+          </td>
+
+          <td style="width: 5%;">
+            <label class="modal-label">Janela Descarga 3</label>
+          </td>
+          <td style="width: 20%;">
+            <input type="time" id="JanelaDescarga3" name="JanelaDescarga3" [(ngModel)]="janelaDestino3"
+              placeholder="HH:mm:ss" min="00:00:00" max="23:59:00" required class="modal-input2" />
+          </td>
+
+          <td style="width: 5%;">
+            <label class="modal-label">Janela Descarga 4</label>
+          </td>
+          <td style="width: 20%;">
+            <input type="time" id="JanelaDescarga4" name="JanelaDescarga4" [(ngModel)]="janelaDestino4"
+              placeholder="HH:mm:ss" min="00:00:00" max="23:59:00" required class="modal-input2" />
+          </td>
+
+        </tr>
+      </table>
+
+      <table class="table2000">
+        <tr>
+          <td>
+            <button class="botao" type="button" (click)="salvar2()">Save</button>
+            <button class="botao" type="button" (click)="cancel()">Cancel</button>
+          </td>
+        </tr>
+
+
+      </table>
+
+
+    </form>
+  </div>
+</clr-modal>
