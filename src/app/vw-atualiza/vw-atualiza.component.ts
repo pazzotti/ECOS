@@ -51,6 +51,8 @@ export class VwAtualizaComponent {
   jsonDataPecas!: any[];
   jsonDataNeca!: any[];
   filteredData!: any[];
+  jsonDataPipe!: any[];
+  jsonDataBat!: any[];
 
   constructor(
     private carregaService: CarregaService,
@@ -67,11 +69,6 @@ export class VwAtualizaComponent {
     const updateOrCreatePeca = (peca: string, newData: any) => {
       if (!mergedData[peca]) {
         mergedData[peca] = newData;
-      } else {
-        // Atualizar os valores conforme necessário
-        mergedData[peca].Pipeline += newData.Pipeline || 0;
-        mergedData[peca].Stock += newData.Stock || 0;
-        // Adicione outras atualizações necessárias aqui
       }
     };
 
@@ -93,7 +90,7 @@ export class VwAtualizaComponent {
         mergedData[data.Peca].Descricao = data.Descricao;
         mergedData[data.Peca].Custo = data.Custo;
         mergedData[data.Peca].Embalagem = data.Embalagem;
-        mergedData[data.Peca].Quantidade = data.Quantidade;
+        mergedData[data.Peca].Stock = data.Quantidade;
         // Adicione outras atualizações necessárias aqui
       }
     });
@@ -101,8 +98,23 @@ export class VwAtualizaComponent {
     (this.jsonDataNeca || []).forEach(data => {
       if (mergedData[data.Peca]) {
         mergedData[data.Peca].DB12 = data.DB12;
+
+        // Adicione outras atualizações necessárias aqui
+      }
+    });
+
+    (this.jsonDataPipe || []).forEach(data => {
+      if (mergedData[data.Peca]) {
         mergedData[data.Peca].Pipeline = data.Pipeline;
-        mergedData[data.Peca].Stock = data.Stock;
+
+        // Adicione outras atualizações necessárias aqui
+      }
+    });
+
+    (this.jsonDataBat || []).forEach(data => {
+      if (mergedData[data.Peca]) {
+        mergedData[data.Peca].Call = data.Call;
+
         // Adicione outras atualizações necessárias aqui
       }
     });
@@ -114,6 +126,16 @@ export class VwAtualizaComponent {
     console.log('Dados filtrados:', this.filteredData);
 
 
+  }
+
+  calculateTotal(item: any): number {
+    const pipeline = item.Pipeline !== undefined ? item.Pipeline : 0;
+    const stock = item.Stock !== undefined ? item.Stock : 0;
+    const call = item.Call !== undefined ? item.Call : 0;
+    const db12 = item.DB12 !== undefined ? item.DB12 : 0;
+    const custo = item.Custo !== undefined ? item.Custo : 0;
+
+    return (pipeline + stock + call - db12) * custo;
   }
 
 
@@ -149,6 +171,30 @@ export class VwAtualizaComponent {
     try {
       const jsonData = await this.carregaService.loadTextNeca(file);
       this.jsonDataNeca = jsonData;
+      console.log('Dados carregados:', jsonData);
+    } catch (error) {
+      console.error('Erro ao carregar o arquivo:', error);
+    }
+  }
+
+  async onFilePipeSelected(event: any) {
+    const file: File = event.target.files[0];
+
+    try {
+      const jsonData = await this.carregaService.loadTextPipe(file);
+      this.jsonDataPipe = jsonData;
+      console.log('Dados carregados:', this.jsonDataPipe);
+    } catch (error) {
+      console.error('Erro ao carregar o arquivo:', error);
+    }
+  }
+
+  async onFileBatSelected(event: any) {
+    const file: File = event.target.files[0];
+
+    try {
+      const jsonData = await this.carregaService.loadTextBat(file);
+      this.jsonDataBat = jsonData;
       console.log('Dados carregados:', jsonData);
       this.mergeData();
     } catch (error) {

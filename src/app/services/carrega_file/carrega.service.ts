@@ -70,7 +70,7 @@ export class CarregaService {
               'Peca': columns[0],
               'MPCode': columns[2],
               'Country': columns[6],
-              'Supplier': columns[7]+ "-" + columns[8],
+              'Supplier': columns[7] + "-" + columns[8],
               // Aqui você pode adicionar mais campos conforme necessário
             };
           });
@@ -101,25 +101,15 @@ export class CarregaService {
           const groupedData: { [key: string]: any } = {};
           lines.forEach(line => {
             const columns = line.split('\t');
-            const chegada = new Date(columns[2]);
-            const db12 = columns[7];
-            const peca = columns[1];
 
-            if (groupedData[peca]) {
-              if (chegada > today) {
-                groupedData[peca].Pipeline += parseFloat(columns[3]);
-              } else {
-                groupedData[peca].Stock += parseFloat(columns[3]);
-              }
-            } else {
-              groupedData[peca] = {
-                'Peca': peca,
-                'Chegada': chegada,
-                'DB12': db12,
-                'Pipeline': chegada > today ? parseFloat(columns[3]) : 0,
-                'Stock': chegada <= today ? parseFloat(columns[3]) : 0,
-              };
-            }
+            const peca = columns[1];
+            const qtde = parseInt(columns[3]);
+
+            groupedData[peca] = {
+              'Peca': peca,
+              'DB12': qtde,
+            };
+
           });
 
           const jsonData: any[] = Object.values(groupedData);
@@ -137,6 +127,99 @@ export class CarregaService {
       reader.readAsText(file);
     });
   }
+
+  loadTextPipe(file: File): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const fileData = event.target?.result;
+        if (typeof fileData === 'string') {
+          const today = new Date();
+          const lines = fileData.trim().split('\n');
+
+          const groupedData: { [key: string]: any } = {};
+          lines.forEach(line => {
+            const columns = line.split('|');
+            const peca = columns[0];
+            let qty = parseInt(columns[7]);
+            if (qty === null || qty === undefined || qty === 0) {
+              qty = 0;
+            }
+
+
+
+            groupedData[peca] = {
+              'Peca': peca,
+              'Pipeline': qty,
+
+            };
+
+          });
+
+          const jsonData: any[] = Object.values(groupedData);
+
+          resolve(jsonData);
+        } else {
+          reject(new Error('Erro ao ler o arquivo.'));
+        }
+      };
+
+      reader.onerror = (event) => {
+        reject(event.target?.error || new Error('Erro ao ler o arquivo.'));
+      };
+
+      reader.readAsText(file);
+    });
+  }
+
+  loadTextBat(file: File): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const fileData = event.target?.result;
+        if (typeof fileData === 'string') {
+          const today = new Date();
+          const lines = fileData.trim().split('\n');
+
+          const groupedData: { [key: string]: any } = {};
+          lines.forEach(line => {
+            const columns = line.split('\t');
+            const peca = columns[3];
+            const frozen = parseInt(columns[10]);
+            const advice = parseInt(columns[11]);
+            const adviceStatus = columns[12];
+            let Qtde = 0;
+            if (adviceStatus === 'F') {
+              Qtde = frozen - advice;
+            } else {
+              Qtde = frozen;
+            }
+
+            groupedData[peca] = {
+              'Peca': peca,
+              'Call': Qtde,
+            };
+
+          });
+
+          const jsonData: any[] = Object.values(groupedData);
+
+          resolve(jsonData);
+        } else {
+          reject(new Error('Erro ao ler o arquivo.'));
+        }
+      };
+
+      reader.onerror = (event) => {
+        reject(event.target?.error || new Error('Erro ao ler o arquivo.'));
+      };
+
+      reader.readAsText(file);
+    });
+  }
+
 
 
 
@@ -215,7 +298,7 @@ export class CarregaService {
     const excelDate = new Date(excelEpoch.getTime() + (serialNumber - 1) * millisecondsPerDay);
     const formattedDate = addDays(excelDate, 1);
 
-    const formattedDate2 = addHours(formattedDate,3);
+    const formattedDate2 = addHours(formattedDate, 3);
     return formattedDate2;
   }
 
@@ -231,7 +314,7 @@ export class CarregaService {
 
   adicionarHora(hora: string, data: Date): Date {
     // Divide a hora em horas e minutos
-    if(hora === null){
+    if (hora === null) {
       hora = '00:00'
     }
     const [horas, minutos] = hora.split(':').map(Number);
@@ -248,7 +331,7 @@ export class CarregaService {
 
   naoadicionarHora(hora: string, data: Date): Date {
     // Divide a hora em horas e minutos
-    if(hora === null){
+    if (hora === null) {
       hora = '00:00'
     }
     const [horas, minutos] = hora.split(':').map(Number);
