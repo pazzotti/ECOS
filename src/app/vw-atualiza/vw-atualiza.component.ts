@@ -73,7 +73,7 @@ export class VwAtualizaComponent {
     };
 
     // Atualizar ou criar um objeto 'Peca' para cada conjunto de dados
-    (this.jsonData || []).forEach((data: { Replaced: string; }) => updateOrCreatePeca(data.Replaced, data));
+    (this.jsonData || []).forEach((data: { Peca: string; }) => updateOrCreatePeca(data.Peca, data));
 
     // Procurar por valores iguais na chave 'Peca' nas outras variáveis e atualizar os dados
     (this.jsonDataParametros || []).forEach(data => {
@@ -342,7 +342,7 @@ export class VwAtualizaComponent {
     }
 
     // Sort the data array based on the selected column and direction
-    this.jsonData.sort((a: { [x: string]: any; }, b: { [x: string]: any; }) => {
+    this.filteredData.sort((a: { [x: string]: any; }, b: { [x: string]: any; }) => {
       const valueA = a[this.sortColumn];
       const valueB = b[this.sortColumn];
 
@@ -355,6 +355,34 @@ export class VwAtualizaComponent {
       }
     });
   }
+
+  sortBy2(column: string) {
+    if (this.sortColumn === column) {
+      // Reverse the sort direction
+      this.sortDirection *= -1;
+    } else {
+      // Set the new sort column and reset the sort direction
+      this.sortColumn = column;
+      this.sortDirection = 1;
+    }
+
+    // Sort the data array based on the selected column and direction
+    this.filteredData.sort((a: { [x: string]: any; }, b: { [x: string]: any; }) => {
+      const valueA = column === 'TotalCost' ? this.calculateTotal(a) : a[column];
+      const valueB = column === 'TotalCost' ? this.calculateTotal(b) : b[column];
+
+      if (valueA < valueB) {
+        return -1 * this.sortDirection;
+      } else if (valueA > valueB) {
+        return 1 * this.sortDirection;
+      } else {
+        return 0;
+      }
+    });
+  }
+
+
+
 
 }
 

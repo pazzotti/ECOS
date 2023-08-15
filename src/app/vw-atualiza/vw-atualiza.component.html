@@ -70,7 +70,7 @@
                 <button (click)="sortBy('Container')">Status</button>
               </th>
               <th>
-                <button (click)="sortBy('Transport')">Part Replaced</button>
+                <button (click)="sortBy('Transport')">Part</button>
               </th>
               <th>
                 <button (click)="sortBy('Dias')">Delivery</button>
@@ -106,11 +106,12 @@
                 <button (click)="sortBy('TripCost')">DB12</button>
               </th>
               <th>
-                <button (click)="sortBy('TripCost')">Unit Cost</button>
+                <button (click)="sortBy('Custo')">Unit Cost</button>
               </th>
               <th>
-                <button (click)="sortBy('TripCost')">Total Cost</button>
+                <button (click)="sortBy2('TotalCost')">Total Cost</button>
               </th>
+
             </tr>
           </thead>
           <tbody>
@@ -118,7 +119,7 @@
               <td>{{ item.UpdateDate.toLocaleDateString('pt-BR') }}</td>
               <td>{{ item.EcoN }}</td>
               <td>{{ item.Status }}</td>
-              <td>{{ item.Replaced }}</td>
+              <td>{{ item.Peca }}</td>
               <td>{{ item.Packaging }}</td>
               <td>{{ item.Embalagem }}</td>
               <td>{{ item.GeneralTime }}</td>
@@ -130,12 +131,14 @@
               <td>{{ item.Pipeline }}</td>
               <td>{{ item.Call }}</td>
               <td>{{ item.DB12 }}</td>
-              <td>{{ item.Custo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</td>
+              <td>{{ item.Custo}}</td>
               <td>
                 {{
                   calculateTotal(item).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                 }}
               </td>
+
+
 
 
             </tr>

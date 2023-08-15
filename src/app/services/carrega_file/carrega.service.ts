@@ -105,11 +105,14 @@ export class CarregaService {
             const peca = columns[1];
             const qtde = parseInt(columns[3]);
 
-            groupedData[peca] = {
-              'Peca': peca,
-              'DB12': qtde,
-            };
-
+            if (groupedData[peca]) {
+              groupedData[peca]['DB12'] += qtde; // Somando a quantidade DB12 para a mesma peça
+            } else {
+              groupedData[peca] = {
+                'Peca': peca,
+                'DB12': qtde,
+              };
+            }
           });
 
           const jsonData: any[] = Object.values(groupedData);
@@ -143,18 +146,18 @@ export class CarregaService {
             const columns = line.split('|');
             const peca = columns[0];
             let qty = parseInt(columns[7]);
-            if (qty === null || qty === undefined || qty === 0) {
+            if (qty === null || qty === undefined || isNaN(qty)) {
               qty = 0;
             }
 
-
-
-            groupedData[peca] = {
-              'Peca': peca,
-              'Pipeline': qty,
-
-            };
-
+            if (groupedData[peca]) {
+              groupedData[peca]['Pipeline'] += qty; // Somando a quantidade Pipeline para a mesma peça
+            } else {
+              groupedData[peca] = {
+                'Peca': peca,
+                'Pipeline': qty,
+              };
+            }
           });
 
           const jsonData: any[] = Object.values(groupedData);
@@ -172,6 +175,7 @@ export class CarregaService {
       reader.readAsText(file);
     });
   }
+
 
   loadTextBat(file: File): Promise<any[]> {
     return new Promise((resolve, reject) => {
@@ -197,11 +201,14 @@ export class CarregaService {
               Qtde = frozen;
             }
 
-            groupedData[peca] = {
-              'Peca': peca,
-              'Call': Qtde,
-            };
-
+            if (groupedData[peca]) {
+              groupedData[peca]['Call'] += Qtde; // Somando a quantidade Call para a mesma peça
+            } else {
+              groupedData[peca] = {
+                'Peca': peca,
+                'Call': Qtde,
+              };
+            }
           });
 
           const jsonData: any[] = Object.values(groupedData);
@@ -224,6 +231,7 @@ export class CarregaService {
 
 
 
+
   loadTextPECAS(file: File): Promise<any[]> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -241,7 +249,7 @@ export class CarregaService {
             const custo = parseFloat(custoStr.replace('.', '').replace(',', '.'));
 
             const embalagem = line.substr(1139, 2); // Ajuste a posição conforme necessário
-            const quantidade = parseInt(line.substr(1144, 8)); // Ajuste a posição conforme necessário
+            const quantidade = parseInt(line.substr(914, 8)); // Ajuste a posição conforme necessário
 
             return {
               'Peca': peca,
