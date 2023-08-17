@@ -195,7 +195,7 @@ export class CarregaService {
             const advice = parseInt(columns[11]);
             const adviceStatus = columns[12];
             let Qtde = 0;
-            if (adviceStatus === 'F') {
+            if (adviceStatus !== 'F') {
               Qtde = frozen - advice;
             } else {
               Qtde = frozen;
