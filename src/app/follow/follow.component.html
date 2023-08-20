@@ -1,0 +1,147 @@
+<body>
+  <div>
+    <div *ngIf="dataLoaded">
+      <table class="table2">
+        <thead>
+
+          <th class="corlinha">
+            ECOS Follow-up
+          </th>
+        </thead>
+      </table>
+
+      <div>
+        <form>
+          <button (click)="filtrarItensAll()">All Itens</button>
+          <button (click)="filtrarItens()">Over Stock</button>
+          <label>Qty itens: {{ itensFiltrados.length }}</label>
+
+        </form>
+      </div>
+
+      <div class="table2">
+        <table>
+          <thead>
+            <tr>
+              <th class="auto-width">
+                Last Update
+              </th>
+              <th class="auto-width">
+                ECO Number
+              </th>
+              <th class="auto-width">
+                Disc Part Number
+              </th>
+              <th class="auto-width">
+                <button (click)="sortBy2('SOP')">SOP</button>
+              </th>
+              <th class="auto-width">
+                <button (click)="sortBy2('SOCOP')">SOCOP</button>
+              </th>
+              <th class="auto-width">
+                <button (click)="sortBy2('SOPDev')">SOP Dev</button>
+              </th>
+
+              <th class="auto-width">
+                <button (click)="sortBy2('SOCOPDev')">SOCOP Dev</button>
+              </th>
+
+              <th class="auto-width">
+                Stock
+              </th>
+              <th class="auto-width">
+                Pipeline
+              </th>
+              <th class="auto-width">
+                Calloff
+              </th>
+              <th class="auto-width">
+                Consumption
+              </th>
+              <th class="auto-width">
+                Total Qty
+              </th>
+              <th class="auto-width">
+                Item Cost
+              </th>
+              <th>
+                <button (click)="sortBy2('TotalCost')">Total Cost</button>
+              </th>
+              <th class="auto-width">
+                Comment
+              </th>
+              <th class="auto-width">
+                Status
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let item of itensFiltrados; let i = index">
+              <tr [ngClass]="{
+                'red-border': item.StatusWork === 'Denied'
+            }">
+                <td >{{ item.UpdateDate | date:'dd/MM/yyyy' }}</td>
+                <td>{{ item.EcoN }}</td>
+                <td>{{item.Peca}}</td>
+                <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOP) }">
+                  {{ item.convertedDateSOP | date: 'dd/MM/yyyy' }}
+                </td>
+                <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOCOP) }">
+                  {{ item.convertedDateSOCOP | date: 'dd/MM/yyyy' }}
+                </td>
+                <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOPDev) }">
+                  {{ item.convertedDateSOPDev | date: 'dd/MM/yyyy' }}
+                </td>
+                <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOCOPDev) }">
+                  {{ item.convertedDateSOCOPDev | date: 'dd/MM/yyyy' }}
+                </td>
+
+                <td>{{item.Stock}}</td>
+                <td>{{item.Pipeline}}</td>
+                <td>{{item.Call}}</td>
+                <td>{{item.DB12}}</td>
+                <td>
+                  {{
+                  (+item.Stock || 0) +
+                  (+item.Pipeline || 0) +
+                  (+item.Call || 0) +
+                  (+item.DB12 || 0)
+                  }}
+                </td>
+                <td>R$ {{item.Custo}}</td>
+                <td>
+                  {{
+                  calculateTotal(item).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                  }}
+                </td>
+                <i-feather name="message-circle" (click)="InsereComent(item, 'Coment')"
+                  [ngClass]="{'green-icon': item.Coment !== '' && item.Coment !== undefined}">
+                </i-feather>
+
+                <td (click)="toggleStatusDropdown(item)" [ngClass]="{
+                  'red-border': item.StatusWork === 'Denied','green-border': item.StatusWork === 'Accepted','yellow-icon': item.StatusWork === 'Analyzing'
+              }">
+                  {{ item.StatusWork }}
+                  <div *ngIf="item.visible === true">
+                    <div (click)="$event.stopPropagation()">
+                      <select [(ngModel)]="selectedStatus">
+                        <option *ngFor="let option of statusOptions" [value]="option">{{ option }}</option>
+                      </select>
+                      <button (click)="saveStatus(item)">Save</button>
+                      <button (click)="cancelStatus(item)">Cancel</button>
+                    </div>
+                  </div>
+                </td>
+
+
+
+
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</body>

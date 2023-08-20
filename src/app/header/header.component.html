@@ -4,11 +4,18 @@
     <div class="menu-items">
 
 
+      <div class="dropdown" (mouseenter)="showDropdown = true" (mouseleave)="showDropdown = false">
+        <button class="dropbtn">Evolution</button>
+        <div class="dropdown-content" *ngIf="showDropdown">
+          <a href="follow" routerLink="/follow">Follow</a>
+        </div>
+      </div>
+
 
       <div class="dropdown" (mouseenter)="showDropdown = true" (mouseleave)="showDropdown = false">
         <button class="dropbtn">Data Update</button>
         <div class="dropdown-content" *ngIf="showDropdown">
-          <a href="atualizaVW" routerLink="/atualizaVW">Pf Tool Data</a>
+          <a href="filesupdate" routerLink="/filesupdate">Pf Tool Data</a>
         </div>
       </div>
 
@@ -16,24 +23,8 @@
 
 
     </div>
-  </div>
-  <div id="navbarNav">
-    <div class="dropdown" (mouseenter)="showDropdown = true" (mouseleave)="showDropdown = false">
-      <button class="dropbtn">Configurações</button>
-      <div class="dropdown-content" *ngIf="showDropdown">
-        <a href="jetta" routerLink="/jetta">Sinc Jetta</a>
-        <a href="atualiza" routerLink="/atualiza">Sinc Excel</a>
-        <a href="fornecedores" routerLink="/fornecedores">Fornecedores</a>
-        <a href="locais" routerLink="/locais">Recebimentos Scania</a>
-        <!-- <a href="carrier" routerLink="/carrier">Transportadoras</a> -->
-        <a href="lab" routerLink="/lab">Veiculos Lab</a>
-        <a href="cadastro" routerLink="/cadastro">Cadastrar Usuário</a>
-        <a href="contratos" routerLink="/contratos">Contratos</a>
-        <a href="carriers" routerLink="/carriers">Transportadores</a>
-        <a href="tipos" routerLink="/tipos">Tipos de Veículos</a>
 
-      </div>
-    </div>
+
 
     <div class="dropdown" (mouseenter)="showDropdown = true" (mouseleave)="showDropdown = false">
       <button  class="dropbtn" type="button" (click)="logout()">Logout</button>

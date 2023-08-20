@@ -59,7 +59,6 @@ export class CarregaService {
   loadTextFile(file: File): Promise<any[]> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-
       reader.onload = (event) => {
         const fileData = event.target?.result;
         if (typeof fileData === 'string') {
@@ -226,11 +225,6 @@ export class CarregaService {
       reader.readAsText(file);
     });
   }
-
-
-
-
-
 
   loadTextPECAS(file: File): Promise<any[]> {
     return new Promise((resolve, reject) => {

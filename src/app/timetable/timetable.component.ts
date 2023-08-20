@@ -105,8 +105,6 @@ export class TimeTableComponent {
 
   editDialog(item: any): void {
 
-
-
     if (Array.isArray(this.carriers)) {
       this.transportadora = this.carriers.map(carrier => carrier.name);
     } else {

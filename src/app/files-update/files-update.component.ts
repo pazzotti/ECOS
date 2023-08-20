@@ -1,7 +1,7 @@
 import { CarregaService } from '../services/carrega_file/carrega.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { format, parse, differenceInDays } from 'date-fns';
+import { format, parse, differenceInDays, getWeek } from 'date-fns';
 import { ApiService } from '../services/contratos/contratos.service';
 import { map, take } from 'rxjs/operators';
 import { formatDate } from '@angular/common';
@@ -9,20 +9,20 @@ import { Observable } from 'rxjs';
 import * as XLSX from 'xlsx';
 
 @Component({
-  selector: 'app-vw-atualiza',
-  templateUrl: './vw-atualiza.component.html',
-  styleUrls: ['./vw-atualiza.component.css'],
+  selector: 'app-files-update',
+  templateUrl: './files-update.component.html',
+  styleUrls: ['./files-update.component.css'],
   template: `
     <progressbar [value]="progressValue" [max]="100">{{ progressValue }}%</progressbar>
   `
 })
-export class VwAtualizaComponent {
+export class FilesUpdateComponent {
 
   progressValue = 0; // Valor atual da barra de progresso
   maxValue = 0; // Valor máximo da barra de progresso
   showProgressBar = false;
   @ViewChild('downloadLink') downloadLink!: ElementRef<HTMLAnchorElement>;
-  urlAtualiza: string = 'https://uj88w4ga9i.execute-api.sa-east-1.amazonaws.com/dev12';
+  urlAtualiza: string = 'https://wo31r57k9d.execute-api.sa-east-1.amazonaws.com/Dev1';
   urlConsulta: string = 'https://4i6nb2mb07.execute-api.sa-east-1.amazonaws.com/dev13';
   query: string = 'ECOs_PfTool';
   items$: Observable<any> | undefined;
@@ -234,11 +234,24 @@ export class VwAtualizaComponent {
       (currentDate.getMonth() + 1).toString().padStart(2, '0') +
       currentDate.getFullYear().toString();
 
+      const semana = getWeek(currentDate);
+      const year = currentDate.getFullYear().toString();
+
+
     const batches = this.chunkArray(this.filteredData, batchSize);
 
     const promises = batches.map(async (batch) => {
       batch.forEach(item => {
         item.lastupdate = formattedDate;
+        let chave = 'Stock' + semana;
+        item[chave]= item.Stock;
+        chave = 'Pipeline' + semana;
+        item[chave] = item.Pipeline;
+        chave = 'Call' + semana;
+        item[chave] = item.Call;
+        chave = 'DB12' + semana;
+        item[chave] = item.DB12;
+
       });
 
       try {
