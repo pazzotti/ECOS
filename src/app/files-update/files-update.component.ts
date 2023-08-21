@@ -243,13 +243,13 @@ export class FilesUpdateComponent {
     const promises = batches.map(async (batch) => {
       batch.forEach(item => {
         item.lastupdate = formattedDate;
-        let chave = 'Stock' + semana;
+        let chave = 'Stock' + semana + year;
         item[chave]= item.Stock;
-        chave = 'Pipeline' + semana;
+        chave = 'Pipeline' + semana + year;
         item[chave] = item.Pipeline;
-        chave = 'Call' + semana;
+        chave = 'Call' + semana + year;
         item[chave] = item.Call;
-        chave = 'DB12' + semana;
+        chave = 'DB12' + semana + year;
         item[chave] = item.DB12;
 
       });
