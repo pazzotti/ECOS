@@ -85,6 +85,9 @@ export class FollowComponent implements OnInit {
   selectedItem: any;
   selectedStatus!: string;
   statusOptions: string[] = ['Analyzing', 'Denied', 'Accepted']; // Substitua pelas opções reais
+  showTooltip: boolean = false;
+  itemToShowTooltipFor: any = null;
+  tooltipPosition: { x: number, y: number } = { x: 300, y: 0 };
 
 
 
@@ -119,6 +122,23 @@ export class FollowComponent implements OnInit {
     // Criar um array contendo o objeto
     const jsonArray = [item];
 
+  }
+
+  updateTooltipPosition(event: MouseEvent) {
+    this.tooltipPosition = { x: event.clientX, y: event.clientY + 10 }; // Adicione um valor positivo para deslocar o tooltip para baixo
+  }
+
+
+  showTooltipForItem(item: any) {
+    if (item.Coment !== '' && item.Coment !== undefined) {
+      this.showTooltip = true;
+      this.itemToShowTooltipFor = item;
+    }
+  }
+
+  hideTooltip() {
+    this.showTooltip = false;
+    this.itemToShowTooltipFor = null;
   }
 
   async saveStatus(item: any) {
@@ -269,7 +289,7 @@ export class FollowComponent implements OnInit {
     const db12 = item.DB12 !== undefined ? item.DB12 : 0;
     const custo = item.Custo !== undefined ? item.Custo : 0;
 
-    return (pipeline + stock + call - db12) * custo;
+    return (stock + call - db12) * custo;
   }
 
   async filtrarItens() {

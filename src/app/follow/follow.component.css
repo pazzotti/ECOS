@@ -608,5 +608,27 @@ select {
   text-align: left;
 }
 
+.custom-tooltip {
+  position: absolute;
+  background-color: black;
+  padding: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transform: translate(-100%, 0); /* Posiciona o tooltip no canto inferior direito */
+}
 
+.container2{
+
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}
+
+i-feather {
+  width: 30%;
+  height: 30%;
+}
 

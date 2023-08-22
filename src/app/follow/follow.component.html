@@ -50,10 +50,7 @@
                 Stock
               </th>
               <th class="auto-width">
-                Pipeline
-              </th>
-              <th class="auto-width">
-                Calloff
+                Calloff + Pipeline
               </th>
               <th class="auto-width">
                 Consumption
@@ -80,7 +77,7 @@
               <tr [ngClass]="{
                 'red-border': item.StatusWork === 'Denied'
             }">
-                <td >{{ item.UpdateDate | date:'dd/MM/yyyy' }}</td>
+                <td>{{ item.UpdateDate | date:'dd/MM/yyyy' }}</td>
                 <td>{{ item.EcoN }}</td>
                 <td>{{item.Peca}}</td>
                 <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOP) }">
@@ -97,14 +94,12 @@
                 </td>
 
                 <td>{{item.Stock}}</td>
-                <td>{{item.Pipeline}}</td>
                 <td>{{item.Call}}</td>
                 <td>{{item.DB12}}</td>
                 <td>
                   {{
                   (+item.Stock || 0) +
-                  (+item.Pipeline || 0) +
-                  (+item.Call || 0) +
+                  (+item.Call || 0) -
                   (+item.DB12 || 0)
                   }}
                 </td>
@@ -114,9 +109,15 @@
                   calculateTotal(item).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                   }}
                 </td>
-                <i-feather name="message-circle" (click)="InsereComent(item, 'Coment')"
-                  [ngClass]="{'green-icon': item.Coment !== '' && item.Coment !== undefined}">
-                </i-feather>
+                <div (mousemove)="updateTooltipPosition($event)">
+                  <i-feather name="message-circle" (mouseenter)="showTooltipForItem(item)" (mouseleave)="hideTooltip()"
+                    (click)="InsereComent(item, 'Coment')"
+                    [ngClass]="{'green-icon': item.Coment !== '' && item.Coment !== undefined}" class="container2">
+                  </i-feather>
+                  <div *ngIf="showTooltip && itemToShowTooltipFor === item" [style.left.px]="tooltipPosition.x"
+                    [style.top.px]="tooltipPosition.y" class="custom-tooltip">{{ item.Coment }}</div>
+                </div>
+
 
                 <td (click)="toggleStatusDropdown(item)" [ngClass]="{
                   'red-border': item.StatusWork === 'Denied','green-border': item.StatusWork === 'Accepted','yellow-icon': item.StatusWork === 'Analyzing'
