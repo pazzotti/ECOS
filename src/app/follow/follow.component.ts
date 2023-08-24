@@ -84,10 +84,12 @@ export class FollowComponent implements OnInit {
   maiorDataSOCOPDev: Date = new Date(0);
   selectedItem: any;
   selectedStatus!: string;
-  statusOptions: string[] = ['Analyzing', 'Denied', 'Accepted']; // Substitua pelas opções reais
+  statusOptions: string[] = ['Analyzing', 'Denied', 'Accepted'];
   showTooltip: boolean = false;
   itemToShowTooltipFor: any = null;
   tooltipPosition: { x: number, y: number } = { x: 300, y: 0 };
+  itens: any[] = []; // Seus itens
+
 
 
 
@@ -114,7 +116,55 @@ export class FollowComponent implements OnInit {
       this.salvarField(item); // Call salvar function after editing the field
     }
 
-}
+  }
+
+  InsereLine(item: any, fieldName: string) {
+    const newValue = prompt(`Insert a value for ${fieldName}:`);
+
+    if (newValue !== null) {
+      const numericValue = parseFloat(newValue);
+
+      if (!isNaN(numericValue)) { // Verifica se a conversão foi bem-sucedida
+        item[fieldName] = numericValue;
+        this.salvarField(item); // Call salvar function after editing the field
+      } else {
+        alert('Invalid input. Please enter a valid number.');
+      }
+    }
+  }
+
+
+
+
+  InsereStatus(item: any, fieldName: string) {
+    const options: Record<number, string> = {
+      1: 'Analyzing',
+      2: 'Denied',
+      3: 'Accepted'
+    };
+
+    const choiceInput = prompt(`Escolha uma opção para ${fieldName}:\n1 - Analyzing\n2 - Denied\n3 - Accepted`);
+
+    if (choiceInput !== null) {
+      const choice = parseInt(choiceInput);
+
+      if (options[choice]) {
+        item[fieldName] = options[choice];
+        this.salvarField(item); // Chame a função salvar após editar o campo
+      } else {
+        alert('Opção inválida.');
+      }
+    }
+  }
+
+  getStatusCount(status: string): number {
+    return this.itensFiltrados.filter(item => item.StatusWork === status).length;
+  }
+
+  getOtherStatusCount(): number {
+    return this.itensFiltrados.filter(item => !['Accepted', 'Denied', 'Analyzing'].includes(item.StatusWork)).length;
+  }
+
 
   toggleStatusDropdown(item: any) {
     item.visible = true;
@@ -288,8 +338,9 @@ export class FollowComponent implements OnInit {
     const call = item.Call !== undefined ? item.Call : 0;
     const db12 = item.DB12 !== undefined ? item.DB12 : 0;
     const custo = item.Custo !== undefined ? item.Custo : 0;
+    const line = item.Line !== undefined ? item.Line : 0;
 
-    return (stock + call - db12) * custo;
+    return (stock + call + line - db12) * custo;
   }
 
   async filtrarItens() {

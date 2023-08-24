@@ -14,8 +14,14 @@
         <form>
           <button (click)="filtrarItensAll()">All Itens</button>
           <button (click)="filtrarItens()">Over Stock</button>
-          <label>Qty itens: {{ itensFiltrados.length }}</label>
+          <!-- Adicione botões para outros status, se necessário -->
 
+          <label>Qty itens: {{ itensFiltrados.length }}</label>
+          <ng-container *ngFor="let status of ['Accepted', 'Denied', 'Analyzing']">
+            <label>{{ status }}: {{ getStatusCount(status) }}</label>
+          </ng-container>
+
+          <label>Without Analisis: {{ getOtherStatusCount() }}</label>
         </form>
       </div>
 
@@ -54,6 +60,9 @@
               </th>
               <th class="auto-width">
                 Consumption
+              </th>
+              <th class="auto-width">
+                Line
               </th>
               <th class="auto-width">
                 Total Qty
@@ -96,9 +105,18 @@
                 <td>{{item.Stock}}</td>
                 <td>{{item.Call}}</td>
                 <td>{{item.DB12}}</td>
+                <td (click)="InsereLine(item, 'Line')" style="max-width: 200px; overflow: hidden;">
+                  <ng-container *ngIf="item.Line !== '' && item.Line !== undefined; else line">
+                    {{ item.Line }}
+                  </ng-container>
+                  <ng-template #line>
+                    0
+                  </ng-template>
+                </td>
                 <td>
                   {{
                   (+item.Stock || 0) +
+                  (+item.Line || 0) +
                   (+item.Call || 0) -
                   (+item.DB12 || 0)
                   }}
@@ -109,30 +127,34 @@
                   calculateTotal(item).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                   }}
                 </td>
-                <div (mousemove)="updateTooltipPosition($event)">
-                  <i-feather name="message-circle" (mouseenter)="showTooltipForItem(item)" (mouseleave)="hideTooltip()"
-                    (click)="InsereComent(item, 'Coment')"
-                    [ngClass]="{'green-icon': item.Coment !== '' && item.Coment !== undefined}" class="container2">
-                  </i-feather>
-                  <div *ngIf="showTooltip && itemToShowTooltipFor === item" [style.left.px]="tooltipPosition.x"
-                    [style.top.px]="tooltipPosition.y" class="custom-tooltip">{{ item.Coment }}</div>
-                </div>
 
-
-                <td (click)="toggleStatusDropdown(item)" [ngClass]="{
-                  'red-border': item.StatusWork === 'Denied','green-border': item.StatusWork === 'Accepted','yellow-icon': item.StatusWork === 'Analyzing'
-              }">
-                  {{ item.StatusWork }}
-                  <div *ngIf="item.visible === true">
-                    <div (click)="$event.stopPropagation()">
-                      <select [(ngModel)]="selectedStatus">
-                        <option *ngFor="let option of statusOptions" [value]="option">{{ option }}</option>
-                      </select>
-                      <button (click)="saveStatus(item)">Save</button>
-                      <button (click)="cancelStatus(item)">Cancel</button>
-                    </div>
-                  </div>
+                <td (click)="InsereComent(item, 'Coment')" style="max-width: 200px; overflow: hidden;">
+                  <ng-container *ngIf="item.Coment !== '' && item.Coment !== undefined; else icon">
+                    {{ item.Coment }}
+                  </ng-container>
+                  <ng-template #icon>
+                    <i-feather name="message-circle"></i-feather>
+                  </ng-template>
                 </td>
+
+
+
+
+                <td (click)="InsereStatus(item, 'StatusWork')" [ngStyle]="{
+    'max-width': '200px',
+    'overflow': 'hidden',
+    'border': (item.StatusWork === 'Accepted') ? '2px solid green' :
+              (item.StatusWork === 'Denied') ? '2px solid red' :
+              (item.StatusWork === 'Analyzing') ? '2px solid yellow' : 'none'
+  }">
+                  <ng-container *ngIf="item.StatusWork !== '' && item.StatusWork !== undefined; else icon2">
+                    {{ item.StatusWork }}
+                  </ng-container>
+                  <ng-template #icon2>
+                    <i-feather name="meh"></i-feather>
+                  </ng-template>
+                </td>
+
 
 
 
