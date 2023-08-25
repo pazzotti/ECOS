@@ -116,10 +116,10 @@
                   {{ item.convertedDateSOCOPDev | date: 'dd/MM/yyyy' }}
                 </td>
 
-                <td>{{item.Stock}}</td>
-                <td>{{item.Call}}</td>
-                <td>{{item.DB12}}</td>
-                <td>{{item.Line}}</td>
+                <td>{{ item.Stock !== undefined && item.Stock !== '' ? item.Stock : 0 }}</td>
+                <td>{{ item.Call !== undefined && item.Call !== '' ? item.Call : 0 }}</td>
+                <td>{{ item.DB12 !== undefined && item.DB12 !== '' ? item.DB12 : 0 }}</td>
+                <td>{{ item.Line !== undefined && item.Line !== '' ? item.Line : 0 }}</td>
                 <td>
                   {{
                   (+item.Stock || 0) +
