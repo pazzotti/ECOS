@@ -133,7 +133,17 @@ export class FollowComponent implements OnInit {
     }
   }
 
-
+  calculateTotalCostAvoid(): number {
+    return this.itensFiltrados.reduce((total, item) => {
+      if (item.StatusWork === 'Accepted') {
+        const totalItemCost = this.calculateTotal(item);
+        if (totalItemCost > 0) {
+          return total + totalItemCost;
+        }
+      }
+      return total;
+    }, 0);
+  }
 
 
   InsereStatus(item: any, fieldName: string) {
@@ -165,6 +175,19 @@ export class FollowComponent implements OnInit {
     return this.itensFiltrados.filter(item => !['Accepted', 'Denied', 'Analyzing'].includes(item.StatusWork)).length;
   }
 
+  calculateTotalCost(): number {
+    return this.itensFiltrados.reduce((total, item) => {
+      const totalItemCost = this.calculateTotal(item);
+      if (totalItemCost > 0) {
+        return total + totalItemCost;
+      }
+      return total;
+    }, 0);
+  }
+
+  formatCurrency(value: number): string {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
 
   toggleStatusDropdown(item: any) {
     item.visible = true;

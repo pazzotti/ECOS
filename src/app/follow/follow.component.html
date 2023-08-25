@@ -24,6 +24,20 @@
           <label>Without Analysis: {{ getOtherStatusCount() }}</label>
         </form>
       </div>
+      <div>
+        <table>
+          <tr>
+            <td>
+              OverStock Cost: {{ calculateTotalCost() | currency: 'BRL' }}
+            </td>
+            <td>
+              Possible Saving: {{ calculateTotalCostAvoid() | currency: 'BRL' }}
+            </td>
+          </tr>
+        </table>
+      </div>
+
+
 
       <div class="table2">
         <table>
@@ -76,8 +90,8 @@
               <th class="auto-width">
                 Comment
               </th>
-              <th class="auto-width">
-                Status
+              <th>
+                <button (click)="sortBy2('StatusWork')">Status</button>
               </th>
             </tr>
           </thead>

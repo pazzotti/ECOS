@@ -44,6 +44,7 @@ import { FilesUpdateComponent } from './files-update/files-update.component';
 import { FollowComponent } from './follow/follow.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { CurrencyFormatPipe } from './follow/CurrencyPipe';
 
 
 const icons = {
@@ -62,6 +63,7 @@ const icons = {
 
 @NgModule({
   declarations: [
+    CurrencyFormatPipe,
     AppComponent,
     FornecedoresComponent,
     ContratoTransportadoraFormDialogComponent,
