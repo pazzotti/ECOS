@@ -106,6 +106,9 @@
                 <button (click)="sortBy('TripCost')">DB12</button>
               </th>
               <th>
+                <button (click)="sortBy('TripCost')">Line</button>
+              </th>
+              <th>
                 <button (click)="sortBy('Custo')">Unit Cost</button>
               </th>
               <th>
@@ -131,6 +134,7 @@
               <td>{{ item.Pipeline }}</td>
               <td>{{ item.Call }}</td>
               <td>{{ item.DB12 }}</td>
+              <td>{{ item.Line }}</td>
               <td>{{ item.Custo}}</td>
               <td>
                 {{

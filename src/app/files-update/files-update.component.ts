@@ -91,6 +91,7 @@ export class FilesUpdateComponent {
         mergedData[data.Peca].Custo = data.Custo;
         mergedData[data.Peca].Embalagem = data.Embalagem;
         mergedData[data.Peca].Stock = data.Quantidade;
+        mergedData[data.Peca].Line = data.Line;
         // Adicione outras atualizações necessárias aqui
       }
     });

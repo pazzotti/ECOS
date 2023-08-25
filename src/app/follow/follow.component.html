@@ -119,14 +119,7 @@
                 <td>{{item.Stock}}</td>
                 <td>{{item.Call}}</td>
                 <td>{{item.DB12}}</td>
-                <td (click)="InsereLine(item, 'Line')" style="max-width: 200px; overflow: hidden;">
-                  <ng-container *ngIf="item.Line !== '' && item.Line !== undefined; else line">
-                    {{ item.Line }}
-                  </ng-container>
-                  <ng-template #line>
-                    0
-                  </ng-template>
-                </td>
+                <td>{{item.Line}}</td>
                 <td>
                   {{
                   (+item.Stock || 0) +

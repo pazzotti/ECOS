@@ -244,13 +244,15 @@ export class CarregaService {
 
             const embalagem = line.substr(1139, 2); // Ajuste a posição conforme necessário
             const quantidade = parseInt(line.substr(914, 8)); // Ajuste a posição conforme necessário
+            const quantidadeLinha = parseInt(line.substr(938, 8)); // Ajuste a posição conforme necessário
 
             return {
               'Peca': peca,
               'Descricao': descricao,
               'Custo': custo,
               'Embalagem': embalagem,
-              'Quantidade': quantidade
+              'Quantidade': quantidade,
+              'Line':quantidadeLinha
               // Adicione mais campos aqui, se necessário
             };
           });
