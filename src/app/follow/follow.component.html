@@ -53,6 +53,12 @@
                 Disc Part Number
               </th>
               <th class="auto-width">
+                <button (click)="sortBy2('MPCode')">MP Code</button>
+              </th>
+              <th class="auto-width">
+                <button (click)="sortBy2('Packaging')">Sup Type</button>
+              </th>
+              <th class="auto-width">
                 <button (click)="sortBy2('SOP')">SOP</button>
               </th>
               <th class="auto-width">
@@ -103,6 +109,8 @@
                 <td>{{ item.UpdateDate | date:'dd/MM/yyyy' }}</td>
                 <td>{{ item.EcoN }}</td>
                 <td>{{item.Peca}}</td>
+                <td>{{item.MPCode}}</td>
+                <td>{{item.Packaging}}</td>
                 <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOP) }">
                   {{ item.convertedDateSOP | date: 'dd/MM/yyyy' }}
                 </td>
