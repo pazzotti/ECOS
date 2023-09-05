@@ -112,16 +112,16 @@
                 <td>{{item.MPCode}}</td>
                 <td>{{item.Packaging}}</td>
                 <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOP) }">
-                  {{ item.convertedDateSOP | date: 'dd/MM/yyyy' }}
+                  {{ item.SOP}}
                 </td>
                 <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOCOP) }">
-                  {{ item.convertedDateSOCOP | date: 'dd/MM/yyyy' }}
+                  {{ item.SOCOP}}
                 </td>
                 <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOPDev) }">
-                  {{ item.convertedDateSOPDev | date: 'dd/MM/yyyy' }}
+                  {{ item.SOPDev}}
                 </td>
                 <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOCOPDev) }">
-                  {{ item.convertedDateSOCOPDev | date: 'dd/MM/yyyy' }}
+                  {{ item.SOCOPDev}}
                 </td>
 
                 <td>{{ item.Stock !== undefined && item.Stock !== '' ? item.Stock : 0 }}</td>
