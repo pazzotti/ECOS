@@ -13,12 +13,6 @@ import { DatePipe } from '@angular/common';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-
-
-
-
-
-
 @Component({
   selector: 'app-follow',
   templateUrl: './follow.component.html',
@@ -89,10 +83,9 @@ export class FollowComponent implements OnInit {
   itemToShowTooltipFor: any = null;
   tooltipPosition: { x: number, y: number } = { x: 300, y: 0 };
   itens: any[] = []; // Seus itens
-
-
-
-
+  anoAtual: number = new Date().getFullYear();
+  semanaAtual: number = 1;
+  semanasPorAno: number = 52; // Pode ser 53 em alguns anos
 
 
   constructor(private dynamoDBService: ApiService, public dialog: MatDialog, private http: HttpClient, private carregaService: CarregaService,) {
@@ -281,8 +274,6 @@ export class FollowComponent implements OnInit {
   }
 
 
-
-
   deleteItem(ID: string): void {
     this.dynamoDBService.deleteItem(ID, this.urlSalva, this.query).subscribe(
       response => {
@@ -356,6 +347,7 @@ export class FollowComponent implements OnInit {
   }
 
   calculateTotal(item: any): number {
+
     const pipeline = item.Pipeline !== undefined ? item.Pipeline : 0;
     const stock = item.Stock !== undefined ? item.Stock : 0;
     const call = item.Call !== undefined ? item.Call : 0;
@@ -365,6 +357,57 @@ export class FollowComponent implements OnInit {
 
     return (stock + call + line - db12) * custo;
   }
+
+  iterarSemanas() {
+    this.anoAtual = 2023;
+
+    for (let semana = 1; semana <= this.semanasPorAno; semana++) {
+      this.semanaAtual = semana;
+
+      for (let i = 0; i < this.ecos.length; i++) {
+        const eco = this.ecos[i];
+        for (this.semanaAtual = 1; this.semanaAtual <= 52; this.semanaAtual++) {
+          const chave1: string = 'Call' + this.semanaAtual + this.anoAtual;
+          const chave2: string = 'Stock' + this.semanaAtual + this.anoAtual;
+          const chave3: string = 'DB12' + this.semanaAtual + this.anoAtual;
+          const chave4: string = 'Line' + this.semanaAtual + this.anoAtual;
+          const chave5: string = 'Pipeline' + this.semanaAtual + this.anoAtual;
+          const chave: string = 'Saldo';
+
+          if (eco[chave1] !== undefined || eco[chave2] !== undefined || eco[chave3] !== undefined || eco[chave4] !== undefined || eco[chave5] !== undefined) {
+            const valor1 = eco[chave1] || 0;
+            const valor2 = eco[chave2] || 0;
+            const valor3 = eco[chave3] || 0;
+            const valor4 = eco[chave4] || 0;
+
+
+            eco[chave] = valor2 + valor1 + valor4 - valor3;
+
+            if (eco.primeiro === undefined) {
+              eco.primeiro = eco[chave];
+            }
+            eco.ultimo = eco[chave];
+            eco.valor1 = valor1
+            eco.valor2 = valor2
+            eco.valor3 = valor3
+            eco.valor4 = valor4
+
+          }
+          this.ecos[i] = eco; // Atualize o objeto no array
+        }
+      }
+
+      if (this.semanaAtual === this.semanasPorAno) {
+        this.semanaAtual = 1;
+        this.anoAtual++;
+      }
+    }
+    console.log("Resultado:", this.ecos);
+  }
+
+
+
+
 
   async filtrarItens() {
     this.itensFiltrados = this.ecos.filter(item => this.calculateTotal(item) > 0);

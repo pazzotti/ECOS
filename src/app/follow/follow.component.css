@@ -627,5 +627,14 @@ select {
   height: 24px;
 }
 
+/* Estilo para a seta para cima (vermelha) */
+.arrow-up {
+  color: red; /* Ou qualquer outra cor desejada */
+}
+
+/* Estilo para a seta para baixo (verde) */
+.arrow-down {
+  color: green; /* Ou qualquer outra cor desejada */
+}
 
 

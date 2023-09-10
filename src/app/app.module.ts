@@ -20,7 +20,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FornecedoresComponent } from './fornecedores/fornecedores.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FeatherModule } from 'angular-feather';
-import { Camera, ZapOff, Zap, Edit, Delete, PlusCircle, Settings, MessageCircle, AlertTriangle, Meh } from 'angular-feather/icons';
+import { Camera, ZapOff, Zap, Edit, Delete, PlusCircle, Settings, MessageCircle, AlertTriangle, Meh, ArrowDown, ArrowUp, Anchor } from 'angular-feather/icons';
 import { InterplantasComponent } from './interplantas/interplantas.component';
 import { TimeTableComponent } from './timetable/timetable.component';
 import { LocaisComponent } from './locais/locais.component';
@@ -57,6 +57,9 @@ const icons = {
   Settings,
   MessageCircle,
   AlertTriangle,
+  ArrowUp,
+  Anchor,
+  ArrowDown,
   Meh
 };
 

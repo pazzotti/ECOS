@@ -252,6 +252,8 @@ export class FilesUpdateComponent {
         item[chave] = item.Call;
         chave = 'DB12' + semana + year;
         item[chave] = item.DB12;
+        chave = 'Line' + semana + year;
+        item[chave] = item.Line;
 
       });
 

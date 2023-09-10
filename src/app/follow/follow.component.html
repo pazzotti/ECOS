@@ -14,6 +14,7 @@
         <form>
           <button (click)="filtrarItensAll()">All Itens</button>
           <button (click)="filtrarItens()">Over Stock</button>
+          <button (click)="iterarSemanas()">Iterar</button>
           <!-- Adicione botões para outros status, se necessário -->
 
           <label>Qty itens: {{ itensFiltrados.length }}</label>
@@ -99,6 +100,15 @@
               <th>
                 <button (click)="sortBy2('StatusWork')">Status</button>
               </th>
+              <th class="auto-width">
+                Trend
+              </th>
+              <th class="auto-width">
+                Inicial Qty
+              </th>
+              <th class="auto-width">
+                Current Qty
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -143,6 +153,7 @@
                   }}
                 </td>
 
+
                 <td (click)="InsereComent(item, 'Coment')" style="max-width: 200px; overflow: hidden;">
                   <ng-container *ngIf="item.Coment !== '' && item.Coment !== undefined; else icon">
                     {{ item.Coment }}
@@ -169,6 +180,24 @@
                     <i-feather name="meh"></i-feather>
                   </ng-template>
                 </td>
+                <td>
+                  <ng-container *ngIf="item.primeiro !== undefined && item.ultimo !== undefined">
+                    <i-feather *ngIf="item.primeiro > item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)" name="arrow-down" class="arrow-down"></i-feather>
+                    <i-feather *ngIf="item.primeiro < item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)" name="arrow-up" class="arrow-up"></i-feather>
+                    <i-feather *ngIf="item.primeiro === item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)" name="anchor"></i-feather>
+                  </ng-container>
+                </td>
+
+
+
+
+                <td>{{ item.primeiro !== undefined && item.primeiro !== '' ? item.primeiro : 0 }}</td>
+                <td>{{ item.ultimo !== undefined && item.ultimo !== '' ? item.ultimo : 0 }}</td>
+
+
+
+
+
 
 
 
