@@ -486,6 +486,46 @@ export class FollowComponent implements OnInit {
     });
   }
 
+  sortBy3(column: string) {
+    if (this.sortColumn === column) {
+      // Reverse the sort direction
+      this.sortDirection *= -1;
+    } else {
+      // Set the new sort column and reset the sort direction
+      this.sortColumn = column;
+      this.sortDirection = 1;
+    }
+
+    // Define uma função para atribuir valores numéricos aos ícones
+    const iconValue = (item: any) => {
+      if (item.primeiro > item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)) {
+        return -1; // Valor para 'arrow-down'
+      } else if (item.primeiro < item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)) {
+        return 1; // Valor para 'arrow-up'
+      } else if (item.primeiro === item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)) {
+        return 0; // Valor para 'anchor'
+      } else {
+        return 2; // Valor padrão para outros casos
+      }
+    };
+
+    // Sort the data array based on the selected column and direction
+    this.itensFiltrados.sort((a: { [x: string]: any; }, b: { [x: string]: any; }) => {
+      // Get the icon values for items a and b
+      const valueA = iconValue(a);
+      const valueB = iconValue(b);
+
+      // Compare based on the icon values
+      if (valueA > valueB) {
+        return this.sortDirection;
+      } else if (valueA < valueB) {
+        return -this.sortDirection;
+      } else {
+        return 0;
+      }
+    });
+  }
+
 
   convertPartPeriodToDate(partPeriod: string): Date {
     const year = parseInt(partPeriod.substring(0, 4));

@@ -48,7 +48,7 @@
                 Last Update
               </th>
               <th class="auto-width">
-                ECO Number
+                <button (click)="sortBy2('EcoN')">ECO Number</button>
               </th>
               <th class="auto-width">
                 Disc Part Number
@@ -100,8 +100,8 @@
               <th>
                 <button (click)="sortBy2('StatusWork')">Status</button>
               </th>
-              <th class="auto-width">
-                Trend
+              <th>
+                <button (click)="sortBy3('primeiro')">Trend</button>
               </th>
               <th class="auto-width">
                 Inicial Qty
@@ -182,9 +182,12 @@
                 </td>
                 <td>
                   <ng-container *ngIf="item.primeiro !== undefined && item.ultimo !== undefined">
-                    <i-feather *ngIf="item.primeiro > item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)" name="arrow-down" class="arrow-down"></i-feather>
-                    <i-feather *ngIf="item.primeiro < item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)" name="arrow-up" class="arrow-up"></i-feather>
-                    <i-feather *ngIf="item.primeiro === item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)" name="anchor"></i-feather>
+                    <i-feather *ngIf="item.primeiro > item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)"
+                      name="arrow-down" class="arrow-down"></i-feather>
+                    <i-feather *ngIf="item.primeiro < item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)"
+                      name="arrow-up" class="arrow-up"></i-feather>
+                    <i-feather *ngIf="item.primeiro === item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)"
+                      name="anchor"></i-feather>
                   </ng-container>
                 </td>
 
