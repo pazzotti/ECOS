@@ -71,7 +71,6 @@ export class FollowComponent implements OnInit {
   datadescarga!: string | null;
   tipoVeiculos: any;
   ecos!: any[];
-  itensFiltrados!: any[];
   maiorDataSOP: Date = new Date(0); // Inicializa com uma data muito antiga
   maiorDataSOCOP: Date = new Date(0);
   maiorDataSOPDev: Date = new Date(0);
@@ -86,6 +85,9 @@ export class FollowComponent implements OnInit {
   anoAtual: number = new Date().getFullYear();
   semanaAtual: number = 1;
   semanasPorAno: number = 52; // Pode ser 53 em alguns anos
+  mostrarItensFinalizados = false;
+  itensFiltrados: any[] = [];
+
 
 
   constructor(private dynamoDBService: ApiService, public dialog: MatDialog, private http: HttpClient, private carregaService: CarregaService,) {
@@ -97,7 +99,8 @@ export class FollowComponent implements OnInit {
 
   async ngOnInit() {
     await this.getItemsFromDynamoDB();
-    await this.filtrarItens(); // Espera pela filtragem assíncrona
+    await this.filtrarItensAll();
+
 
   }
 
@@ -138,6 +141,30 @@ export class FollowComponent implements OnInit {
     }, 0);
   }
 
+  calculateTotalCostScrap(): number {
+    return this.itensFiltrados.reduce((total, item) => {
+      if (item.StatusWork === 'Denied') {
+        const totalItemCost = this.calculateTotal(item);
+        if (totalItemCost > 0) {
+          return total + totalItemCost;
+        }
+      }
+      return total;
+    }, 0);
+  }
+
+  calculateTotalCostAvoidReal(): number {
+    return this.itensFiltrados.reduce((total, item) => {
+
+      const totalItemCost = this.calculateTotalReal(item);
+      if (totalItemCost > 0) {
+        return total + totalItemCost;
+      }
+
+      return total;
+    }, 0);
+  }
+
 
   InsereStatus(item: any, fieldName: string) {
     const options: Record<number, string> = {
@@ -159,6 +186,16 @@ export class FollowComponent implements OnInit {
       }
     }
   }
+
+  Finished(item: any) {
+    const confirmMessage = 'Deseja finalizar o item?';
+
+    if (confirm(confirmMessage)) {
+      item.Finished = true;
+      this.salvarField(item); // Chame a função salvar após editar o campo
+    }
+  }
+
 
   getStatusCount(status: string): number {
     return this.itensFiltrados.filter(item => item.StatusWork === status).length;
@@ -358,6 +395,14 @@ export class FollowComponent implements OnInit {
     return (stock + call + line - db12) * custo;
   }
 
+  calculateTotalReal(item: any): number {
+
+    const resultado = item.resultado !== undefined ? item.resultado : 0;
+
+
+    return resultado;
+  }
+
   iterarSemanas() {
     this.anoAtual = 2023;
 
@@ -393,6 +438,14 @@ export class FollowComponent implements OnInit {
             eco.valor4 = valor4
 
           }
+          if (eco.ultimo < 0) {
+            eco.ultimo = 0;
+          }
+          eco.resultado = eco.primeiro - eco.ultimo;
+          if (eco.resultado < 0) {
+            eco.resultado = 0;
+          }
+          eco.resultado = eco.resultado * eco.Custo
           this.ecos[i] = eco; // Atualize o objeto no array
         }
       }
@@ -426,6 +479,8 @@ export class FollowComponent implements OnInit {
         item.convertedDateSOCOPDev = this.convertPartPeriodToDate(item.SOCOPDev);
       }
     }
+
+    await this.iterarSemanas();
   }
 
   isDateBeforeToday(date: Date): boolean {
@@ -435,23 +490,31 @@ export class FollowComponent implements OnInit {
 
 
   filtrarItensAll() {
-    this.itensFiltrados = this.ecos.filter(item => this.calculateTotal(item) !== null);
+    if (Array.isArray(this.ecos)) { // Verifica se this.ecos é uma matriz
+      this.itensFiltrados = this.ecos.filter(item => this.calculateTotal(item) !== null);
 
-    for (const item of this.itensFiltrados) {
-      if (item.SOP) {
-        item.convertedDateSOP = this.convertPartPeriodToDate(item.SOP);
+      for (const item of this.itensFiltrados) {
+        if (item.SOP) {
+          item.convertedDateSOP = this.convertPartPeriodToDate(item.SOP);
+        }
+        if (item.SOCOP) {
+          item.convertedDateSOCOP = this.convertPartPeriodToDate(item.SOCOP);
+        }
+        if (item.SOPDev) {
+          item.convertedDateSOPDev = this.convertPartPeriodToDate(item.SOPDev);
+        }
+        if (item.SOCOPDev) {
+          item.convertedDateSOCOPDev = this.convertPartPeriodToDate(item.SOCOPDev);
+        }
       }
-      if (item.SOCOP) {
-        item.convertedDateSOCOP = this.convertPartPeriodToDate(item.SOCOP);
-      }
-      if (item.SOPDev) {
-        item.convertedDateSOPDev = this.convertPartPeriodToDate(item.SOPDev);
-      }
-      if (item.SOCOPDev) {
-        item.convertedDateSOCOPDev = this.convertPartPeriodToDate(item.SOCOPDev);
-      }
+
+      this.iterarSemanas();
+    } else {
+      // Lide com a situação em que this.ecos não é uma matriz, por exemplo, definindo this.itensFiltrados como vazio.
+      this.itensFiltrados = [];
     }
   }
+
 
   sortBy2(column: string) {
     if (this.sortColumn === column) {

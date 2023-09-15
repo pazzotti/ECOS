@@ -14,10 +14,15 @@
         <form>
           <button (click)="filtrarItensAll()">All Itens</button>
           <button (click)="filtrarItens()">Over Stock</button>
-          <button (click)="iterarSemanas()">Iterar</button>
+
+          <button (click)="mostrarItensFinalizados = !mostrarItensFinalizados">
+            {{ mostrarItensFinalizados ? 'Show Opened' : 'Show Finished' }}
+          </button>
           <!-- Adicione botões para outros status, se necessário -->
 
           <label>Qty itens: {{ itensFiltrados.length }}</label>
+
+
           <ng-container *ngFor="let status of ['Accepted', 'Denied', 'Analyzing']">
             <label>{{ status }}: {{ getStatusCount(status) }}</label>
           </ng-container>
@@ -33,6 +38,12 @@
             </td>
             <td>
               Possible Saving: {{ calculateTotalCostAvoid() | currency: 'BRL' }}
+            </td>
+            <td>
+              Real Saving: {{ calculateTotalCostAvoidReal() | currency: 'BRL' }}
+            </td>
+            <td>
+              Current Scrap: {{ calculateTotalCostScrap() | currency: 'BRL' }}
             </td>
           </tr>
         </table>
@@ -109,104 +120,103 @@
               <th class="auto-width">
                 Current Qty
               </th>
+              <th>Current Saving</th>
             </tr>
           </thead>
           <tbody>
             <ng-container *ngFor="let item of itensFiltrados; let i = index">
-              <tr [ngClass]="{
+
+                <tr *ngIf="!mostrarItensFinalizados || item.Finished" [ngClass]="{
                 'red-border': item.StatusWork === 'Denied'
             }">
-                <td>{{ item.UpdateDate | date:'dd/MM/yyyy' }}</td>
-                <td>{{ item.EcoN }}</td>
-                <td>{{item.Peca}}</td>
-                <td>{{item.MPCode}}</td>
-                <td>{{item.Packaging}}</td>
-                <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOP) }">
-                  {{ item.SOP}}
-                </td>
-                <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOCOP) }">
-                  {{ item.SOCOP}}
-                </td>
-                <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOPDev) }">
-                  {{ item.SOPDev}}
-                </td>
-                <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOCOPDev) }">
-                  {{ item.SOCOPDev}}
-                </td>
+                  <td (click)="Finished(item)">{{ item.UpdateDate | date:'dd/MM/yyyy' }}</td>
+                  <td>{{ item.EcoN }}</td>
+                  <td>{{item.Peca}}</td>
+                  <td>{{item.MPCode}}</td>
+                  <td>{{item.Packaging}}</td>
+                  <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOP) }">
+                    {{ item.SOP}}
+                  </td>
+                  <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOCOP) }">
+                    {{ item.SOCOP}}
+                  </td>
+                  <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOPDev) }">
+                    {{ item.SOPDev}}
+                  </td>
+                  <td [ngClass]="{ 'red-bg': isDateBeforeToday(item.convertedDateSOCOPDev) }">
+                    {{ item.SOCOPDev}}
+                  </td>
 
-                <td>{{ item.Stock !== undefined && item.Stock !== '' ? item.Stock : 0 }}</td>
-                <td>{{ item.Call !== undefined && item.Call !== '' ? item.Call : 0 }}</td>
-                <td>{{ item.DB12 !== undefined && item.DB12 !== '' ? item.DB12 : 0 }}</td>
-                <td>{{ item.Line !== undefined && item.Line !== '' ? item.Line : 0 }}</td>
-                <td>
-                  {{
-                  (+item.Stock || 0) +
-                  (+item.Line || 0) +
-                  (+item.Call || 0) -
-                  (+item.DB12 || 0)
-                  }}
-                </td>
-                <td>R$ {{item.Custo}}</td>
-                <td>
-                  {{
-                  calculateTotal(item).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                  }}
-                </td>
-
-
-                <td (click)="InsereComent(item, 'Coment')" style="max-width: 200px; overflow: hidden;">
-                  <ng-container *ngIf="item.Coment !== '' && item.Coment !== undefined; else icon">
-                    {{ item.Coment }}
-                  </ng-container>
-                  <ng-template #icon>
-                    <i-feather name="message-circle"></i-feather>
-                  </ng-template>
-                </td>
+                  <td>{{ item.Stock !== undefined && item.Stock !== '' ? item.Stock : 0 }}</td>
+                  <td>{{ item.Call !== undefined && item.Call !== '' ? item.Call : 0 }}</td>
+                  <td>{{ item.DB12 !== undefined && item.DB12 !== '' ? item.DB12 : 0 }}</td>
+                  <td>{{ item.Line !== undefined && item.Line !== '' ? item.Line : 0 }}</td>
+                  <td>
+                    {{
+                    (+item.Stock || 0) +
+                    (+item.Line || 0) +
+                    (+item.Call || 0) -
+                    (+item.DB12 || 0)
+                    }}
+                  </td>
+                  <td>R$ {{item.Custo}}</td>
+                  <td>
+                    {{
+                    calculateTotal(item).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                    }}
+                  </td>
 
 
+                  <td (click)="InsereComent(item, 'Coment')" style="max-width: 200px; overflow: hidden;">
+                    <ng-container *ngIf="item.Coment !== '' && item.Coment !== undefined; else icon">
+                      {{ item.Coment }}
+                    </ng-container>
+                    <ng-template #icon>
+                      <i-feather name="message-circle"></i-feather>
+                    </ng-template>
+                  </td>
 
 
-                <td (click)="InsereStatus(item, 'StatusWork')" [ngStyle]="{
+
+
+                  <td (click)="InsereStatus(item, 'StatusWork')" [ngStyle]="{
     'max-width': '200px',
     'overflow': 'hidden',
     'border': (item.StatusWork === 'Accepted') ? '2px solid green' :
               (item.StatusWork === 'Denied') ? '2px solid red' :
               (item.StatusWork === 'Analyzing') ? '2px solid yellow' : 'none'
   }">
-                  <ng-container *ngIf="item.StatusWork !== '' && item.StatusWork !== undefined; else icon2">
-                    {{ item.StatusWork }}
-                  </ng-container>
-                  <ng-template #icon2>
-                    <i-feather name="meh"></i-feather>
-                  </ng-template>
-                </td>
-                <td>
-                  <ng-container *ngIf="item.primeiro !== undefined && item.ultimo !== undefined">
-                    <i-feather *ngIf="item.primeiro > item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)"
-                      name="arrow-down" class="arrow-down"></i-feather>
-                    <i-feather *ngIf="item.primeiro < item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)"
-                      name="arrow-up" class="arrow-up"></i-feather>
-                    <i-feather *ngIf="item.primeiro === item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)"
-                      name="anchor"></i-feather>
-                  </ng-container>
-                </td>
+                    <ng-container *ngIf="item.StatusWork !== '' && item.StatusWork !== undefined; else icon2">
+                      {{ item.StatusWork }}
+                    </ng-container>
+                    <ng-template #icon2>
+                      <i-feather name="meh"></i-feather>
+                    </ng-template>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="item.primeiro !== undefined && item.ultimo !== undefined">
+                      <i-feather *ngIf="item.primeiro > item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)"
+                        name="arrow-down" class="arrow-down"></i-feather>
+                      <i-feather *ngIf="item.primeiro < item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)"
+                        name="arrow-up" class="arrow-up"></i-feather>
+                      <i-feather *ngIf="item.primeiro === item.ultimo && (item.primeiro >= 0 || item.ultimo >= 0)"
+                        name="anchor"></i-feather>
+                    </ng-container>
+                  </td>
 
 
 
 
-                <td>{{ item.primeiro !== undefined && item.primeiro !== '' ? item.primeiro : 0 }}</td>
-                <td>{{ item.ultimo !== undefined && item.ultimo !== '' ? item.ultimo : 0 }}</td>
+                  <td>{{ item.primeiro !== undefined && item.primeiro !== '' ? item.primeiro : 0 }}</td>
+                  <td>{{ item.ultimo !== undefined && item.ultimo !== '' ? item.ultimo : 0 }}</td>
+                  <td>{{
+                    (+item.resultado || 0)| currency: 'BRL'
+                    }}</td>
 
 
 
+                </tr>
 
-
-
-
-
-
-
-              </tr>
             </ng-container>
           </tbody>
         </table>
