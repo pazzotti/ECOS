@@ -102,7 +102,11 @@ export class CarregaService {
             const columns = line.split('\t');
 
             const peca = columns[1];
-            const qtde = parseInt(columns[3]);
+            let qtde = parseInt(columns[3]);
+
+            if(qtde === undefined || qtde === null){
+              qtde = 0;
+            }
 
             if (groupedData[peca]) {
               groupedData[peca]['DB12'] += qtde; // Somando a quantidade DB12 para a mesma peça
@@ -200,6 +204,10 @@ export class CarregaService {
               Qtde = frozen;
             }
 
+            if (Qtde === null || Qtde === undefined || isNaN(Qtde)) {
+              Qtde = 0;
+            }
+
             if (groupedData[peca]) {
               groupedData[peca]['Call'] += Qtde; // Somando a quantidade Call para a mesma peça
             } else {
@@ -243,8 +251,16 @@ export class CarregaService {
             const custo = parseFloat(custoStr.replace('.', '').replace(',', '.'));
 
             const embalagem = line.substr(1139, 2); // Ajuste a posição conforme necessário
-            const quantidade = parseInt(line.substr(914, 8)); // Ajuste a posição conforme necessário
-            const quantidadeLinha = parseInt(line.substr(938, 8)); // Ajuste a posição conforme necessário
+            let quantidade = parseInt(line.substr(914, 8)); // Ajuste a posição conforme necessário
+            let quantidadeLinha = parseInt(line.substr(938, 8)); // Ajuste a posição conforme necessário
+
+            if (quantidade === null || quantidade === undefined || isNaN(quantidade)) {
+              quantidade = 0;
+            }
+
+            if (quantidadeLinha === null || quantidadeLinha === undefined || isNaN(quantidadeLinha)) {
+              quantidadeLinha = 0;
+            }
 
             return {
               'Peca': peca,
@@ -349,60 +365,6 @@ export class CarregaService {
 
     return novaData;
   }
-
-
-
-
-
-  processData(fileContent: string): any[] {
-    const parsedData = this.papa.parse(fileContent, {
-      header: true,
-      delimiter: ';'
-    }).data;
-    const result = [];
-    const seen = new Set();
-    for (const row of parsedData) {
-      const {
-        'Process': Process,
-        'Container Id': Container,
-        ' Channel': Channel,
-        'Clearance Place': ClearancePlace,
-        'Step': Step,
-        'Transp. Type': Transport,
-        'Invoice Number': Invoice,
-        'SLine': Liner,
-        'ATA': ATA,
-        'Vessel Name/Flight (SLine)': Vessel
-        // Continuar com os ajustes para as demais propriedades
-      } = row;
-
-      if (!Container || Container.trim().length === 0 || Transport != 10 || ATA === '') {
-        continue; // pula linhas vazias e com Supplier Number vazio
-      }
-
-      const key = `${Container},${Process}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        result.push({
-          Process,
-          Container,
-          Channel,
-          ClearancePlace,
-          Step,
-          Transport,
-          Invoice,
-          Liner,
-          ATA,
-          Vessel
-          // Continuar com as demais propriedades que deseja extrair
-        });
-      }
-    }
-
-    return result;
-  }
-
-
 
   testarArquivoCSV(arquivo: File): Promise<TesteArquivoResultado> {
     return new Promise<TesteArquivoResultado>((resolve, reject) => {
