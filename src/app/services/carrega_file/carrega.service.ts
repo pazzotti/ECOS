@@ -246,7 +246,7 @@ export class CarregaService {
             const peca = line.substr(0, 7).trim();
             const descricao = line.substr(7, 40).trim();
 
-            const custoMatch = line.match(/(\d{2,3}(?:\.\d{3})*,\d{2})/);
+            const custoMatch = line.match(/(\d{1,5}(?:\.\d{3})*,\d{2})/);
             const custoStr = custoMatch ? custoMatch[0] : '0.00'; // Defina um valor padrão caso não haja correspondência
             const custo = parseFloat(custoStr.replace('.', '').replace(',', '.'));
 
