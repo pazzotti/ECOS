@@ -48,9 +48,6 @@
           </tr>
         </table>
       </div>
-
-
-
       <div class="table2">
         <table>
           <thead>
@@ -208,7 +205,14 @@
 
 
                   <td>{{ item.primeiro !== undefined && item.primeiro !== '' ? item.primeiro : 0 }}</td>
-                  <td>{{ item.ultimo !== undefined && item.ultimo !== '' ? item.ultimo : 0 }}</td>
+                  <td>
+                    {{
+                    (+item.Stock || 0) +
+                    (+item.Line || 0) +
+                    (+item.Call || 0) -
+                    (+item.DB12 || 0)
+                    }}
+                  </td>
                   <td>{{
                     (+item.resultado || 0)| currency: 'BRL'
                     }}</td>

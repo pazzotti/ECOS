@@ -421,12 +421,18 @@ export class FollowComponent implements OnInit {
 
           if (eco[chave1] !== undefined || eco[chave2] !== undefined || eco[chave3] !== undefined || eco[chave4] !== undefined || eco[chave5] !== undefined) {
             const valor1 = eco[chave1] || 0;
+            this.ecos[i].Call = eco[chave1] || 0;
+
             const valor2 = eco[chave2] || 0;
+            this.ecos[i].Stock = eco[chave2] || 0;
             const valor3 = eco[chave3] || 0;
+            this.ecos[i].DB12 = eco[chave3] || 0;
             const valor4 = eco[chave4] || 0;
+            this.ecos[i].Line = eco[chave4] || 0;
 
 
             eco[chave] = valor2 + valor1 + valor4 - valor3;
+            this.ecos[i].Saldo = eco[chave];
 
             if (eco.primeiro === undefined) {
               eco.primeiro = eco[chave];
