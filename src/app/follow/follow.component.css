@@ -637,4 +637,8 @@ select {
   color: green; /* Ou qualquer outra cor desejada */
 }
 
-
+ /* Estilos para a div.table-container */
+ .table-container {
+  width: 100%;
+  overflow-x: auto; /* Adicione uma barra de rolagem horizontal se a tabela for muito larga */
+}

@@ -30,7 +30,7 @@
           <label>Without Analysis: {{ getOtherStatusCount() }}</label>
         </form>
       </div>
-      <div>
+      <div class="table-container">
         <table>
           <tr>
             <td>
@@ -48,7 +48,7 @@
           </tr>
         </table>
       </div>
-      <div class="table2">
+       <div class="table-container">>
         <table>
           <thead>
             <tr>
@@ -123,7 +123,7 @@
           <tbody>
             <ng-container *ngFor="let item of itensFiltrados; let i = index">
 
-                <tr *ngIf="!mostrarItensFinalizados || item.Finished" [ngClass]="{
+              <tr *ngIf="(mostrarItensFinalizados && item.Finished) || (!mostrarItensFinalizados && !item.Finished)" [ngClass]="{
                 'red-border': item.StatusWork === 'Denied'
             }">
                   <td (click)="Finished(item)">{{ item.UpdateDate | date:'dd/MM/yyyy' }}</td>

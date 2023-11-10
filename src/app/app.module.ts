@@ -9,7 +9,6 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { ContratoTransportadoraFormDialogComponent } from './app/home/contrato_transportadora/contrato-transportadora-form-dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AtualizarComponent } from './atualizar/atualizar.component';
-import { ContratoTransportadoraComponent } from './contrato-transportadora/contrato-transportadora.component';
 import { FormularioLocaisComponent } from './formulario_locais/formulario_locais';
 import { CarrierComponent } from './carriers/carriers.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -21,8 +20,6 @@ import { FornecedoresComponent } from './fornecedores/fornecedores.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FeatherModule } from 'angular-feather';
 import { Camera, ZapOff, Zap, Edit, Delete, PlusCircle, Settings, MessageCircle, AlertTriangle, Meh, ArrowDown, ArrowUp, Anchor } from 'angular-feather/icons';
-import { InterplantasComponent } from './interplantas/interplantas.component';
-import { TimeTableComponent } from './timetable/timetable.component';
 import { LocaisComponent } from './locais/locais.component';
 import { MatInputModule } from '@angular/material/input';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
@@ -31,11 +28,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { ClarityModule } from '@clr/angular';
 import { ContratoTerrestreFormDialogComponent } from './app/home/contrato_terrestre/contrato-terrestre-form-dialog.component';
 import { ExtraRequestComponent } from './app/home/extra-request/extra-request.component';
-import { ExtraFreightComponent } from './extra-freight/extra-freight.component';
 import { LoginComponent } from './login/login.component';
 import { SharedModule } from './shared/shared.module';
 import { CadastroComponent } from './cadastro/cadastro.component';
-import { CadastroCarriersComponent } from './cadastro-carriers/cadastro-carriers.component';
 import { CadastroContratosComponent } from './cadastro-contratos/cadastro-contratos.component';
 import { CadastroUsersComponent } from './cadastro-users/cadastro-users.component';
 import { CustomDatePipe } from './relatorio/custom-data-pipe';
@@ -72,21 +67,16 @@ const icons = {
     ContratoTransportadoraFormDialogComponent,
     AtualizarComponent,
     DashboardComponent,
-    ContratoTransportadoraComponent,
     LoginComponent,
     VeiculosFormDialogComponent,
     CadastroComponent,
     FormularioLocaisComponent,
     ExtraRequestComponent,
-    ExtraFreightComponent,
     ContratoTerrestreFormDialogComponent,
     CarrierComponent,
     CarregaJettaComponent,
-    InterplantasComponent,
-    TimeTableComponent,
     LocaisComponent,
     RelatorioComponent,
-    CadastroCarriersComponent,
     CadastroContratosComponent,
     CadastroUsersComponent,
     CustomDatePipe,

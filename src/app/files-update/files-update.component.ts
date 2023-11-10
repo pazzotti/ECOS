@@ -22,7 +22,7 @@ export class FilesUpdateComponent {
   maxValue = 0; // Valor máximo da barra de progresso
   showProgressBar = false;
   @ViewChild('downloadLink') downloadLink!: ElementRef<HTMLAnchorElement>;
-  urlAtualiza: string = 'https://wo31r57k9d.execute-api.sa-east-1.amazonaws.com/Dev1';
+  urlAtualiza: string = 'https://ktb8xjoqck.execute-api.sa-east-1.amazonaws.com/Dev2';
   urlConsulta: string = 'https://4i6nb2mb07.execute-api.sa-east-1.amazonaws.com/dev13';
   query: string = 'ECOs_PfTool';
   items$: Observable<any> | undefined;
