@@ -253,6 +253,7 @@ export class CarregaService {
             const embalagem = line.substr(1139, 2); // Ajuste a posição conforme necessário
             let quantidade = parseInt(line.substr(914, 8)); // Ajuste a posição conforme necessário
             let quantidadeLinha = parseInt(line.substr(938, 8)); // Ajuste a posição conforme necessário
+            let terceiros = parseInt(line.substr(923, 8)); // Ajuste a posição conforme necessário
 
             if (quantidade === null || quantidade === undefined || isNaN(quantidade)) {
               quantidade = 0;
@@ -268,7 +269,8 @@ export class CarregaService {
               'Custo': custo,
               'Embalagem': embalagem,
               'Quantidade': quantidade,
-              'Line':quantidadeLinha
+              'Line':quantidadeLinha,
+              'Terc':terceiros
               // Adicione mais campos aqui, se necessário
             };
           });

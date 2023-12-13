@@ -94,6 +94,9 @@
                 Line
               </th>
               <th class="auto-width">
+                Third party
+              </th>
+              <th class="auto-width">
                 Total Qty
               </th>
               <th class="auto-width">
@@ -148,6 +151,7 @@
                   <td>{{ item.Call !== undefined && item.Call !== '' ? item.Call : 0 }}</td>
                   <td>{{ item.DB12 !== undefined && item.DB12 !== '' ? item.DB12 : 0 }}</td>
                   <td>{{ item.Line !== undefined && item.Line !== '' ? item.Line : 0 }}</td>
+                  <td>{{ item.Terc !== undefined && item.Terc !== '' ? item.Terc : 0 }}</td>
                   <td>
                     {{
                     (+item.Stock || 0) +

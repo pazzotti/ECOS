@@ -91,6 +91,7 @@ export class FilesUpdateComponent {
         mergedData[data.Peca].Custo = data.Custo;
         mergedData[data.Peca].Embalagem = data.Embalagem;
         mergedData[data.Peca].Stock = data.Quantidade;
+        mergedData[data.Peca].Stock = data.Terc;
         mergedData[data.Peca].Line = data.Line;
         // Adicione outras atualizações necessárias aqui
       }
@@ -252,6 +253,8 @@ export class FilesUpdateComponent {
         item[chave] = item.Call;
         chave = 'DB12' + semana + year;
         item[chave] = item.DB12;
+        chave = 'Terc' + semana + year;
+        item[chave] = item.Terc;
         chave = 'Line' + semana + year;
         item[chave] = item.Line;
 
